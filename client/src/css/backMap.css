@@ -1,0 +1,5 @@
+.map {
+    position: relative;
+    max-height: 100vh;
+    left: calc(50vw - 25%);
+}
