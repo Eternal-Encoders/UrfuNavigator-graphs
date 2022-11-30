@@ -1,6 +1,5 @@
 import "../css/canvas.css"
 import React from "react"
-import Map from "./BackMap"
 import Point from "./GraphPoint"
 
 
@@ -31,7 +30,6 @@ class Canvas extends React.Component {
                 <div>
                     {childrens}
                 </div>
-                <Map />
             </div>
         )
     }
