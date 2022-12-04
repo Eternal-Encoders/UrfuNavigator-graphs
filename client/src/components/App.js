@@ -1,4 +1,5 @@
 import React from 'react'
+import {PointTypes} from './Constants.js'
 
 const Indoor = require('indoorjs')
 
@@ -33,14 +34,14 @@ class App extends React.Component {
     afterClick(e) {
         const xCoord = (e.clientX - 10 + this.map.originX) / this.map.zoom + this.map.center.x;
         const yCoord = (e.clientY - 10 + this.map.originY) / this.map.zoom - this.map.center.y;
+        const markers = this.map.getMarkers();
+        const activeObject = this.map.canvas.getActiveObjects();
 
-        if (!(this.map.getMarkers().some((element) => {
-            return Math.abs(element.position.x * this.map.zoom - xCoord * this.map.zoom) <= 21 && 
-                Math.abs(element.position.y * this.map.zoom - yCoord * this.map.zoom) <= 21;
-        }))) {
+        if (activeObject.length === 0) {
             let id = Math.floor(Math.random() * 100)
             this.graphPoints.push({
-                id: id
+                id: id,
+                type: PointTypes.CORRIDOR
             });
 
             const marker = new Indoor.Marker([xCoord, yCoord], {
@@ -50,10 +51,24 @@ class App extends React.Component {
                 id: id
             });
             marker.addTo(this.map);
+            if (markers.length !== 0) {
+                marker.setLinks([markers[markers.length - 1]]);
+            }
         }
         else if (e.ctrlKey) {
-            this.map.canvas.getActiveObjects().forEach(element => {
+            activeObject.forEach(element => {
                 this.map.canvas.remove(element);
+
+                element.parent.connectors.forEach(elem => {
+                    console.log(elem)
+                    this.map.canvas.remove(elem.shape);
+                });
+                this.__getConnectors().forEach(connector => {
+                    if (connector.parent.end.id === element.id) {
+                        this.map.canvas.remove(connector);
+                    }
+                })
+
                 this.graphPoints.splice(this.__getGraphPointIndex(element.id), 1);
             });
         }
@@ -62,6 +77,10 @@ class App extends React.Component {
     __getGraphPointIndex(id) {
         const idIndexes = this.graphPoints.map((el) => {return el.id});
         return idIndexes.indexOf(id);
+    }
+
+    __getConnectors() {
+        return this.map.canvas._objects.filter(obj => {return obj.class === "line"});
     }
 
     render() {
