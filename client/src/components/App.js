@@ -1,5 +1,4 @@
 import React from 'react'
-import Point from "./GraphPoint"
 
 const Indoor = require('indoorjs')
 
@@ -8,7 +7,7 @@ class App extends React.Component {
         super(props)
         this.mapImg = props.mapImg
         this.map = undefined;
-        this.coords = [];
+        this.graphPoints = [];
         this.afterClick = this.afterClick.bind(this);
     }
 
@@ -28,29 +27,41 @@ class App extends React.Component {
               x: 0,
               y: 0
             }
-        })
+        });
     }
 
     afterClick(e) {
-        const xCoord = (e.clientX - 10 + this.map.originX) / this.map.zoom + this.map.center.x
-        const yCoord = (e.clientY - 10 + this.map.originY) / this.map.zoom - this.map.center.y
-        let key = e.clientX + e.clientY
-        const pointToPush = new Point({
-            key: key, 
-            id: key, 
-            x: xCoord, 
-            y: yCoord
-        });
-        this.coords.push(pointToPush);
+        const xCoord = (e.clientX - 10 + this.map.originX) / this.map.zoom + this.map.center.x;
+        const yCoord = (e.clientY - 10 + this.map.originY) / this.map.zoom - this.map.center.y;
 
-        const marker = new Indoor.Marker([xCoord, yCoord], {
-            text: `${this.coords.length}`,
-            draggable: true,
-            zIndex: 100,
-            id: pointToPush.id
-        });
-        marker.addTo(this.map)
-        console.log(this.map)
+        if (!(this.map.getMarkers().some((element) => {
+            return Math.abs(element.position.x * this.map.zoom - xCoord * this.map.zoom) <= 21 && 
+                Math.abs(element.position.y * this.map.zoom - yCoord * this.map.zoom) <= 21;
+        }))) {
+            let id = Math.floor(Math.random() * 100)
+            this.graphPoints.push({
+                id: id
+            });
+
+            const marker = new Indoor.Marker([xCoord, yCoord], {
+                text: `${id}`,
+                draggable: true,
+                zIndex: 100,
+                id: id
+            });
+            marker.addTo(this.map);
+        }
+        else if (e.ctrlKey) {
+            this.map.canvas.getActiveObjects().forEach(element => {
+                this.map.canvas.remove(element);
+                this.graphPoints.splice(this.__getGraphPointIndex(element.id), 1);
+            });
+        }
+    }
+
+    __getGraphPointIndex(id) {
+        const idIndexes = this.graphPoints.map((el) => {return el.id});
+        return idIndexes.indexOf(id);
     }
 
     render() {
@@ -60,7 +71,7 @@ class App extends React.Component {
                 onClick={this.afterClick}
             >
             </div>
-        )
+        );
     }
 }
 
