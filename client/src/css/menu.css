@@ -1,0 +1,8 @@
+.menu-form {
+    position: absolute;
+    z-index: 200;
+}
+
+.menu-form:focus {
+    border: none;
+}

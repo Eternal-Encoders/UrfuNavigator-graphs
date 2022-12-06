@@ -1,15 +1,19 @@
-import React from 'react'
-import {PointTypes} from './Constants.js'
+import React from 'react';
+import {PointTypes} from './Constants.js';
+import '../css/app.css';
 
 const Indoor = require('indoorjs')
+const Uuidv = require("uuid")
 
 class App extends React.Component {
     constructor(props) {
         super(props)
         this.mapImg = props.mapImg
         this.map = undefined;
+        this.activeObject = [];
         this.graphPoints = [];
         this.afterClick = this.afterClick.bind(this);
+        this.afterKeyPress = this.afterKeyPress.bind(this);
     }
 
     componentDidMount() {
@@ -38,37 +42,46 @@ class App extends React.Component {
         const activeObject = this.map.canvas.getActiveObjects();
 
         if (activeObject.length === 0) {
-            let id = Math.floor(Math.random() * 100)
+            let id = Uuidv.v4();
             this.graphPoints.push({
                 id: id,
                 type: PointTypes.CORRIDOR
             });
 
             const marker = new Indoor.Marker([xCoord, yCoord], {
-                text: `${id}`,
+                size: 6,
                 draggable: true,
                 zIndex: 100,
                 id: id
             });
             marker.addTo(this.map);
-            if (markers.length !== 0) {
+            if (this.activeObject.length === 0 && markers.length !== 0) {
                 marker.setLinks([markers[markers.length - 1]]);
             }
+            else {
+                const activeMarkers = this.activeObject.map(obj => {
+                    return this.map.getMarkerById(obj.id);
+                });
+                marker.setLinks(activeMarkers);
+            }
         }
-        else if (e.ctrlKey) {
-            activeObject.forEach(element => {
-                this.map.canvas.remove(element);
+        this.activeObject = activeObject;
+    }
 
+    afterKeyPress(e) {
+        if (e.keyCode === 46) {
+            this.map.canvas.getActiveObjects().forEach(element => {
                 element.parent.connectors.forEach(elem => {
-                    console.log(elem)
                     this.map.canvas.remove(elem.shape);
                 });
                 this.__getConnectors().forEach(connector => {
                     if (connector.parent.end.id === element.id) {
+                        console.log(connector.parent);
                         this.map.canvas.remove(connector);
                     }
                 })
 
+                this.map.canvas.remove(element);
                 this.graphPoints.splice(this.__getGraphPointIndex(element.id), 1);
             });
         }
@@ -88,6 +101,9 @@ class App extends React.Component {
             <div 
                 ref={(el) => this._canv = el}
                 onClick={this.afterClick}
+                onKeyDown={this.afterKeyPress}
+                tabIndex="0"
+                className='app-container'
             >
             </div>
         );
