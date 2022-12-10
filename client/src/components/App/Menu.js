@@ -1,6 +1,6 @@
 import React from "react";
 import {PointTypes, TypesToColor} from "./Constants";
-import "../css/menu.css";
+import "../../css/menu.css";
 
 class Menu extends React.Component {
     constructor(props) {

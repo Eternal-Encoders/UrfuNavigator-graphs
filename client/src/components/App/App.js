@@ -1,6 +1,6 @@
 import React from "react"
 import GraphMaker from "./GraphMaker"
-import "../css/app.css"
+import "../../css/app.css"
 
 class App extends React.Component {
     constructor(props) {

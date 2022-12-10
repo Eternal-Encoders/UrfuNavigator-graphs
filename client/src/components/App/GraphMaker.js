@@ -1,7 +1,7 @@
 import React from 'react';
 import {PointTypes, TypesToColor} from './Constants.js';
 import Menu from './Menu';
-import '../css/graphMaker.css';
+import '../../css/graphMaker.css';
 
 const Indoor = require('indoorjs')
 const Uuidv = require("uuid")
