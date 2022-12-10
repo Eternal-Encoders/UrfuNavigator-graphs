@@ -1,8 +1,21 @@
 .menu-form {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 2;
     position: absolute;
+    top: 60px;
     z-index: 200;
+    background-color:rgba(255, 255, 255, 0.623)
 }
 
 .menu-form:focus {
     border: none;
+}
+
+.form-label {
+    display: flex;
+}
+
+.form-input {
+    margin-left: 10px;
 }
