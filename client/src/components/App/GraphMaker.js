@@ -8,7 +8,10 @@ const Uuidv = require("uuid")
 
 class GraphMaker extends React.Component {
     constructor(props) {
-        super(props)
+        super(props);
+        this.state = {
+            renderMenu: false
+        };
         this.mapImg = props.mapImg;
         this.map = undefined;
         this.activeObject = [];
@@ -38,10 +41,11 @@ class GraphMaker extends React.Component {
     }
 
     afterClick(e) {
-        const xCoord = (e.clientX - 6 + this.map.originX) / this.map.zoom + this.map.center.x;
-        const yCoord = (e.clientY - 6 + this.map.originY) / this.map.zoom - this.map.center.y;
+        const xCoord = (e.clientX + this.map.originX) / this.map.zoom + this.map.center.x;
+        const yCoord = (e.clientY + this.map.originY) / this.map.zoom - this.map.center.y;
         const markers = this.map.getMarkers();
         const activeObject = this.map.canvas.getActiveObjects();
+        this.setState({renderMenu: false});
 
         if (activeObject.length === 0) {
             let id = Uuidv.v4();
@@ -78,6 +82,7 @@ class GraphMaker extends React.Component {
         }
         else {
             this._menu.setMarkers(activeObject);
+            this.setState({renderMenu: true});
         }
 
         this.activeObject = activeObject;
@@ -127,6 +132,8 @@ class GraphMaker extends React.Component {
                 id: el.id,
                 type: el.type,
                 name: el.name,
+                floorId: el.floorId,
+                exitId: el.exitId,
                 x: marker.position.x,
                 y: marker.position.y,
                 link: marker.links.map(link => { return {
@@ -151,14 +158,18 @@ class GraphMaker extends React.Component {
     }
 
     render() {
+        if (this._menu) {
+            this._menu.setIsRendered(this.state.renderMenu);
+        }
         return (
             <>
                 <Menu 
                     ref={el => this._menu = el} 
                     points={this.graphPoints}
+                    isRendered={this.state.renderMenu}
                 />
                 <button 
-                    className='download'
+                    className='download btn'
                     onClick={this.afterLinkClick}
                 >
                     Скачать граф

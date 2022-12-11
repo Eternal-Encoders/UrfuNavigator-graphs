@@ -1,4 +1,5 @@
 import React from "react"
+import { NavLink as Link } from "react-router-dom";
 import GraphMaker from "./GraphMaker"
 import "../../css/app.css"
 
@@ -14,10 +15,12 @@ class App extends React.Component {
     }
 
     afterFileChange(e) {
-        this.setState({ background: "" });
-        const reader = new FileReader();
-        reader.readAsDataURL(e.target.files[0]);
-        reader.onload = () => { this.setState({ background: reader.result }); };
+        if (e.target.files.length !== 0) {
+            this.setState({ background: "" });
+            const reader = new FileReader();
+            reader.readAsDataURL(e.target.files[0]);
+            reader.onload = () => { this.setState({ background: reader.result }); };
+        }
     }
 
     render() {
@@ -31,6 +34,7 @@ class App extends React.Component {
         return (
             <>
                 <input type="file" onChange={this.afterFileChange} className="file-change"></input>
+                <Link to="/" className="to-home hoverable">В начало</Link>
                 {graphMaker}
             </>
         );

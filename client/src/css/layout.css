@@ -1,0 +1,18 @@
+.home-links {
+    display: flex;
+    position: absolute;
+    list-style-type: none;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.home-links-item {
+    padding: 10px 20px;
+    margin-right: 10px;
+    border-radius: 1px;
+    border: solid #000 2px;
+    font-size: 36px;
+    color: #000;
+    text-decoration: none;
+}
