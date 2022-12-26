@@ -25,8 +25,6 @@ class GraphMaker extends React.Component {
         this.map = new Indoor.Map(this._canv, {
             floorplan: new Indoor.Floor({
               url: this.mapImg,
-              width: this.mapImg.width,
-              height: this.mapImg.height * 2,
               opacity: 0.8,
               zIndex: 1
             }),
@@ -125,6 +123,32 @@ class GraphMaker extends React.Component {
         link.click();
     }
 
+    addNewPoints(newPoints) {
+        newPoints.forEach(point => {
+            this.graphPoints.push({
+                id: point.id,
+                type: point.type,
+                name: point.name ? point.name: undefined,
+                floorId: point.floorId ? point.floorId: undefined,
+                exitId: point.exitId ? point.exitId: undefined
+            });
+
+            const marker = new Indoor.Marker([point.x, point.y], {
+                size: 6,
+                stroke: TypesToColor[point.type],
+                draggable: true,
+                zIndex: 100,
+                id: point.id
+            });
+            marker.addTo(this.map);
+        });
+
+        newPoints.forEach(point => {
+            const marker = this.map.getMarkerById(point.id);
+            marker.setLinks(point.link.map(el => { return this.map.getMarkerById(el.id); }));
+        })
+    }
+
     __getGraphJSON() {
         return this.graphPoints.map(el => {
             const marker = this.map.getMarkerById(el.id);
@@ -161,6 +185,7 @@ class GraphMaker extends React.Component {
         if (this._menu) {
             this._menu.setIsRendered(this.state.renderMenu);
         }
+
         return (
             <>
                 <Menu 

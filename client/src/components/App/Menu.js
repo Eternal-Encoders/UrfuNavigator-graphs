@@ -55,9 +55,12 @@ class Menu extends React.Component {
     setMarkers(markers) {
         this.markers = markers;
         const marker = this.__getById(markers[0].id);
-        this.setState({ selectionValue: marker.type });
-
-        this.setState({ nameValue: marker.name ? marker.name: "" });
+        this.setState({ 
+            selectionValue: marker.type,
+            nameValue: marker.name ? marker.name: "",
+            floorId: marker.floorId ? marker.floorId: "",
+            exitId: marker.exitId ? marker.exitId: ""
+        });
     }
 
     setIsRendered(bool) {

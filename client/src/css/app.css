@@ -1,8 +1,14 @@
-.file-change {
+.file-change__container {
     position: absolute;
+    display: flex;
+    flex-direction: column;
     margin-top: 10px;
     margin-left: 10px;
     z-index: 200;
+}
+
+.file-change {
+    margin-bottom: 10px;
 }
 
 .to-home {

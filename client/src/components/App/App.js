@@ -8,10 +8,12 @@ class App extends React.Component {
         super(props);
 
         this.state = {
-            background: ""
+            background: "",
+            points: []
         }
 
         this.afterFileChange = this.afterFileChange.bind(this);
+        this.afterPointsChange = this.afterPointsChange.bind(this);
     }
 
     afterFileChange(e) {
@@ -23,19 +25,31 @@ class App extends React.Component {
         }
     }
 
+    afterPointsChange(e) {
+        if (e.target.files.length !== 0) {
+            const reader = new FileReader();
+            reader.readAsText(e.target.files[0]);
+            reader.onload = () => { this.setState({points: JSON.parse(reader.result)}); };
+        }
+    }
+
     render() {
-        const graphMaker = this.state.background !== "" 
-            ? <GraphMaker 
-                ref={el => this.maker = el} 
-                mapImg={this.state.background}
-            /> 
-            : null
+        const graphMaker = <GraphMaker 
+            ref={el => this.maker = el} 
+            mapImg={this.state.background} 
+        />;
+        const imgInput = <input type="file" onChange={this.afterFileChange} className="file-change"></input>;
+        const pointsInput = <input type="file" onChange={this.afterPointsChange} className="file-change"></input>
+        if (this.maker) this.maker.addNewPoints(this.state.points);
 
         return (
             <>
-                <input type="file" onChange={this.afterFileChange} className="file-change"></input>
+                <div className="file-change__container">
+                    {imgInput}
+                    {this.state.background !== "" ? pointsInput: null}
+                </div>
                 <Link to="/" className="to-home hoverable">В начало</Link>
-                {graphMaker}
+                {this.state.background !== "" ? graphMaker: null}
             </>
         );
     }
