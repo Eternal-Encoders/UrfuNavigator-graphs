@@ -102,7 +102,7 @@ class MakeInstitute extends React.Component {
                 <div className="s-1 file-field input-field">
                     <div className="btn">
                         <span>{i}</span>
-                        <input type="file" onChange={this.afterChange} data-id={i}/>
+                        <input type="file" onChange={this.afterChange} data-id={i} accept="application/JSON"/>
                     </div>
                     <div className="file-path-wrapper">
                         <input className="file-path validate" type="text"/>

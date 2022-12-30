@@ -38,8 +38,8 @@ class App extends React.Component {
             ref={el => this.maker = el} 
             mapImg={this.state.background} 
         />;
-        const imgInput = <input type="file" onChange={this.afterFileChange} className="file-change"></input>;
-        const pointsInput = <input type="file" onChange={this.afterPointsChange} className="file-change"></input>
+        const imgInput = <input type="file" onChange={this.afterFileChange} className="file-change" accept="image/*"></input>;
+        const pointsInput = <input type="file" onChange={this.afterPointsChange} className="file-change" accept="application/JSON"></input>
         if (this.maker) this.maker.addNewPoints(this.state.points);
 
         return (
