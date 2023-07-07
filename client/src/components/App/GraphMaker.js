@@ -1,14 +1,17 @@
 import React from 'react';
 import {PointTypes, TypesToColor} from './Constants.js';
 import Menu from './Menu';
-import '../css/graphMaker.css';
+import '../../css/graphMaker.css';
 
 const Indoor = require('indoorjs')
 const Uuidv = require("uuid")
 
 class GraphMaker extends React.Component {
     constructor(props) {
-        super(props)
+        super(props);
+        this.state = {
+            renderMenu: false
+        };
         this.mapImg = props.mapImg;
         this.map = undefined;
         this.activeObject = [];
@@ -22,8 +25,6 @@ class GraphMaker extends React.Component {
         this.map = new Indoor.Map(this._canv, {
             floorplan: new Indoor.Floor({
               url: this.mapImg,
-              width: this.mapImg.width,
-              height: this.mapImg.height * 2,
               opacity: 0.8,
               zIndex: 1
             }),
@@ -38,10 +39,11 @@ class GraphMaker extends React.Component {
     }
 
     afterClick(e) {
-        const xCoord = (e.clientX - 6 + this.map.originX) / this.map.zoom + this.map.center.x;
-        const yCoord = (e.clientY - 6 + this.map.originY) / this.map.zoom - this.map.center.y;
+        const xCoord = (e.clientX + this.map.originX) / this.map.zoom + this.map.center.x;
+        const yCoord = (e.clientY + this.map.originY) / this.map.zoom - this.map.center.y;
         const markers = this.map.getMarkers();
         const activeObject = this.map.canvas.getActiveObjects();
+        this.setState({renderMenu: false});
 
         if (activeObject.length === 0) {
             let id = Uuidv.v4();
@@ -78,6 +80,7 @@ class GraphMaker extends React.Component {
         }
         else {
             this._menu.setMarkers(activeObject);
+            this.setState({renderMenu: true});
         }
 
         this.activeObject = activeObject;
@@ -120,21 +123,68 @@ class GraphMaker extends React.Component {
         link.click();
     }
 
+    addNewPoints(newPoints) {
+        newPoints.forEach(point => {
+            this.graphPoints.push({
+                id: point.id,
+                type: point.type,
+                name: point.name ? point.name: undefined,
+                floorId: point.floorId ? point.floorId: undefined,
+                exitId: point.exitId ? point.exitId: undefined
+            });
+
+            const marker = new Indoor.Marker([point.x, point.y], {
+                size: 6,
+                stroke: TypesToColor[point.type],
+                draggable: true,
+                zIndex: 100,
+                id: point.id
+            });
+            marker.addTo(this.map);
+        });
+
+        newPoints.forEach(point => {
+            const marker = this.map.getMarkerById(point.id);
+            console.log(point)
+            marker.setLinks(point.renderlinks.map(el => { return this.map.getMarkerById(el.id); }));
+        })
+    }
+
     __getGraphJSON() {
-        return this.graphPoints.map(el => {
+        const result = this.graphPoints.map(el => {
             const marker = this.map.getMarkerById(el.id);
             return {
                 id: el.id,
                 type: el.type,
                 name: el.name,
+                floorId: el.floorId,
+                exitId: el.exitId,
                 x: marker.position.x,
                 y: marker.position.y,
-                link: marker.links.map(link => { return {
+                renderlinks: marker.links.map(link => { return {
                     id: link.id, 
                     length: this.__calcLength(marker.position, link.position)
-                }})
+                }}),
+                searchLinks: []
             };
         });
+        this.__getByClass('line').forEach(el => {
+            const connector = el.parent;
+            const start = result.find(mark => mark.id === connector.start.id);
+            const end = result.find(mark => mark.id === connector.end.id);
+            const length = this.__calcLength(start, end)
+
+            start.searchLinks.push({
+                id: end.id,
+                length: length
+            })
+            end.searchLinks.push({
+                id: start.id,
+                length: length
+            })
+        });
+        console.log(result);
+        return result
     }
 
     __calcLength(point1, point2) {
@@ -151,14 +201,19 @@ class GraphMaker extends React.Component {
     }
 
     render() {
+        if (this._menu) {
+            this._menu.setIsRendered(this.state.renderMenu);
+        }
+
         return (
             <>
                 <Menu 
                     ref={el => this._menu = el} 
                     points={this.graphPoints}
+                    isRendered={this.state.renderMenu}
                 />
                 <button 
-                    className='download'
+                    className='download btn'
                     onClick={this.afterLinkClick}
                 >
                     Скачать граф
