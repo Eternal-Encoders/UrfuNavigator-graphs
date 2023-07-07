@@ -132,7 +132,7 @@ class MakeInstitute extends React.Component {
                             <label for="first_name" className="active">Название</label>
                         </div>
                         <div className="input-field col s1">
-                            <input type="number" value={this.state.florsCount} onChange={this.afterFloorChange} min="1" max="12"/>
+                            <input type="number" value={this.state.florsCount} onChange={this.afterFloorChange} min="1" max="15"/>
                             <label htmlFor="first_name" className="active">Количество этажей</label>
                         </div>
                         <div className="col">

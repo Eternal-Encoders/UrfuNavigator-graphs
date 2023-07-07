@@ -145,12 +145,13 @@ class GraphMaker extends React.Component {
 
         newPoints.forEach(point => {
             const marker = this.map.getMarkerById(point.id);
-            marker.setLinks(point.link.map(el => { return this.map.getMarkerById(el.id); }));
+            console.log(point)
+            marker.setLinks(point.renderlinks.map(el => { return this.map.getMarkerById(el.id); }));
         })
     }
 
     __getGraphJSON() {
-        return this.graphPoints.map(el => {
+        const result = this.graphPoints.map(el => {
             const marker = this.map.getMarkerById(el.id);
             return {
                 id: el.id,
@@ -160,12 +161,30 @@ class GraphMaker extends React.Component {
                 exitId: el.exitId,
                 x: marker.position.x,
                 y: marker.position.y,
-                link: marker.links.map(link => { return {
+                renderlinks: marker.links.map(link => { return {
                     id: link.id, 
                     length: this.__calcLength(marker.position, link.position)
-                }})
+                }}),
+                searchLinks: []
             };
         });
+        this.__getByClass('line').forEach(el => {
+            const connector = el.parent;
+            const start = result.find(mark => mark.id === connector.start.id);
+            const end = result.find(mark => mark.id === connector.end.id);
+            const length = this.__calcLength(start, end)
+
+            start.searchLinks.push({
+                id: end.id,
+                length: length
+            })
+            end.searchLinks.push({
+                id: start.id,
+                length: length
+            })
+        });
+        console.log(result);
+        return result
     }
 
     __calcLength(point1, point2) {
