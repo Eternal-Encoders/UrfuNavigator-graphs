@@ -1,5 +1,5 @@
 .graph {
     position: fixed;
-    z-index: 2;
+    z-index: 3;
     transform: translate(-12.5px, -12.5px);
 }

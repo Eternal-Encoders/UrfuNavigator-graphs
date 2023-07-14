@@ -41,6 +41,7 @@ function GraphPoint({id, point, zoom}: GraphPointProps) {
     }, [id, offset, point, setIsMovingDisable, updateGraphPoint]);
 
     const handelMouseDown = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+        console.log(1);
         setCurGraphPoint(id);
         setIsMovingDisable(true);
         setMousePos({ x: e.clientX , y: e.clientY });
@@ -48,6 +49,7 @@ function GraphPoint({id, point, zoom}: GraphPointProps) {
 
     return (
         <div
+            id={id}
             className="graph-point"
             style={{
                 top: point.y,

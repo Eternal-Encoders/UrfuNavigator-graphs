@@ -1,4 +1,5 @@
 const enum PointTypes {
+    CORRIDOR = "corridor",
     Auditorium = "auditorium",
     Dinning = "dinning",
     Exit = "exit",

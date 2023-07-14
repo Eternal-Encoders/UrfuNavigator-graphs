@@ -21,7 +21,7 @@ interface IAuditorium {
 interface IGraphPoint {
   x: number,
   y: number,
-  links: IGraphPoint[],
+  links: string[],
   dataId: string
 }
 

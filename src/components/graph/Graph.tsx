@@ -3,6 +3,7 @@ import {  } from "react-bootstrap";
 import { IGraphPoint } from "../../utils/Interfaces";
 import { useTransformContext } from "react-zoom-pan-pinch";
 import GraphPoint from "../graph-point/GraphPoint";
+import PointsLink from "../points-link/PointsLink";
 
 import "./graph-style.css";
 
@@ -17,12 +18,17 @@ function Graph({points}: GraphProps) {
         <div className="graph">
             {Object.keys(points).map((key) => {
                 const el = points[key];
-                return <GraphPoint 
-                    key={key}
-                    id={key}
-                    point={el}
-                    zoom={context.transformState.scale}
-                />
+                const links = el.links.map(nextId => <PointsLink start={key} end={nextId} /> )
+
+                return <>
+                    {links}
+                    <GraphPoint 
+                        key={key}
+                        id={key}
+                        point={el}
+                        zoom={context.transformState.scale}
+                    />
+                </>
             })}
         </div>
     );

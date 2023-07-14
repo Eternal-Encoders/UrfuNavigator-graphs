@@ -8,7 +8,7 @@ interface MapUploaderProps {
 }
 
 function MapUploader({onUpload}: MapUploaderProps) {
-    const {updateAuditorium, updateGraphPoint} = useContext(DrawContext);
+    const {updateAuditorium, updateGraphPoint, updateData} = useContext(DrawContext);
 
     function onChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
         if (e.target.files && e.target.files.length === 1) {
@@ -24,6 +24,10 @@ function MapUploader({onUpload}: MapUploaderProps) {
                 Object.keys(json.graph).forEach((key) => {
                     const graphPoint = json.graph[key];
                     updateGraphPoint(key, graphPoint);
+                });
+                Object.keys(json.data).forEach((key) => {
+                    const dataObj = json.data[key];
+                    updateData(key, dataObj);
                 });
             }
             onUpload(false);
