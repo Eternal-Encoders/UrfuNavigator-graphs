@@ -1,0 +1,6 @@
+.auditorium {
+    position: absolute;
+    outline-offset: -2.5px;
+    outline-style: solid;
+    outline-width: 5px;
+}
