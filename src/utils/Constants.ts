@@ -18,10 +18,11 @@ const enum PointTypes {
 };
 
 const PointTranslation = {
+    [PointTypes.CORRIDOR]: "Коридор",
     [PointTypes.Auditorium]: "Аудитория",
     [PointTypes.Dinning]: "Столовая",
     [PointTypes.Exit]: "Вход/Выход",
-    [PointTypes.Stair]: "Лустница",
+    [PointTypes.Stair]: "Лестница",
     [PointTypes.ToiletM]: "Туалет (М)",
     [PointTypes.ToiletW]: "Туалет (Ж)",
     [PointTypes.Cafe]: "Кафе",

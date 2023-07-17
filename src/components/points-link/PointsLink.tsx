@@ -9,7 +9,15 @@ interface PointsLinkProps {
 
 function PointsLink({start, end}: PointsLinkProps) {
     return (
-        <Xarrow start={start} end={end} />
+        <Xarrow 
+            start={start} 
+            end={end} 
+            color="#808080"
+            showHead={false}
+            strokeWidth={3}
+            path="straight"
+            zIndex={2} 
+        />
     );
 }
 

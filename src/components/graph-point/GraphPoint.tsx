@@ -13,8 +13,24 @@ function GraphPoint({id, point, zoom}: GraphPointProps) {
     const [offset, setOffset] = useState({ x: 0, y: 0 });
     const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
-    const {isMovingDisable, setIsMovingDisable, updateGraphPoint, setCurGraphPoint} = useContext(DrawContext);
+    const {isMovingDisable, curGraphPoint, graph, setIsMovingDisable, updateGraphPoint, setCurGraphPoint} = useContext(DrawContext);
     
+    const handelClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+        e.stopPropagation();
+        /*
+        if (curGraphPoint && id !== curGraphPoint) {
+            const newCurrPoint = {...graph[curGraphPoint]};
+            const newThisPoint = {...graph[id]};
+
+            newCurrPoint.links.push(id);
+            newThisPoint.links.push(curGraphPoint);
+
+            updateGraphPoint(curGraphPoint, newCurrPoint);
+            updateGraphPoint(id, newThisPoint);
+        }
+        */
+    }, []);
+
     const handelMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
         if (isMovingDisable) {
             const curOffset = {
@@ -31,8 +47,7 @@ function GraphPoint({id, point, zoom}: GraphPointProps) {
             {
                 x: point.x + offset.x,
                 y: point.y + offset.y,
-                links: point.links,
-                dataId: point.dataId
+                links: point.links
             }
         );
         setIsMovingDisable(false);
@@ -41,11 +56,21 @@ function GraphPoint({id, point, zoom}: GraphPointProps) {
     }, [id, offset, point, setIsMovingDisable, updateGraphPoint]);
 
     const handelMouseDown = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-        console.log(1);
+        if (curGraphPoint && e.ctrlKey) {
+            const newCurrPoint = {...graph[curGraphPoint]};
+            const newThisPoint = {...graph[id]};
+
+            newCurrPoint.links.push(id);
+            newThisPoint.links.push(curGraphPoint);
+
+            updateGraphPoint(curGraphPoint, newCurrPoint);
+            updateGraphPoint(id, newThisPoint);
+        }
+
         setCurGraphPoint(id);
         setIsMovingDisable(true);
         setMousePos({ x: e.clientX , y: e.clientY });
-    }, [id, setMousePos, setIsMovingDisable, setCurGraphPoint]);
+    }, [id, curGraphPoint, updateGraphPoint, setMousePos, setIsMovingDisable, setCurGraphPoint]);
 
     return (
         <div
@@ -56,6 +81,7 @@ function GraphPoint({id, point, zoom}: GraphPointProps) {
                 left: point.x,
                 transform: `translate(${offset.x}px, ${offset.y}px)`
             }}
+            onClick={handelClick}
             onMouseDown={handelMouseDown}
             onMouseMove={handelMouseMove}
             onMouseUp={handelMouseUp}

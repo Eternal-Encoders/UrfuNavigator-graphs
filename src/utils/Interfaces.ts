@@ -21,13 +21,12 @@ interface IAuditorium {
 interface IGraphPoint {
   x: number,
   y: number,
-  links: string[],
-  dataId: string
+  links: string[]
 }
 
 interface IData {
-  type: PointTypes,
   names: string[],
+  type: PointTypes,
   floor: number,
   institute: string,
   time: [string, string],
@@ -36,16 +35,25 @@ interface IData {
   availableFloors?: number[]
 }
 
+interface IOption {
+  floor: number,
+  institute: string,
+  widht: number,
+  height: number
+}
+
 interface IMapObject {
     audiences: { [id: string]: IAuditorium },
     graph: { [id: string]: IGraphPoint },
     data: { [dataId: string]: IData }
+    options: IOption
 }
 
 export type {
     IAuditorium,
     IGraphPoint,
     IAuditoriumChild,
+    IOption,
     IData,
     IMapObject
 }

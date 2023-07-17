@@ -1,5 +1,5 @@
 import { createContext, useState, useCallback } from "react";
-import { IAuditorium, IGraphPoint, IData } from "../utils/Interfaces";
+import { IAuditorium, IGraphPoint, IData, IOption } from "../utils/Interfaces";
 
 interface IDrawContext {
     curGraphPoint: string | undefined,
@@ -7,11 +7,15 @@ interface IDrawContext {
     audiences: { [id: string]: IAuditorium },
     graph: { [id: string]: IGraphPoint },
     data: { [dataId: string]: IData },
+    options: IOption,
     setCurGraphPoint: (pointId: string | undefined) => void,
     setIsMovingDisable: (isMoving: boolean) => void,
     updateAuditorium: (id: string, value: IAuditorium) => void,
     updateGraphPoint: (id: string, value: IGraphPoint) => void,
-    updateData: (dataId: string, value: IData) => void
+    deleteGraphPoint: (id: string) => void,
+    updateData: (dataId: string, value: IData) => void,
+    deleteData: (dataId: string) => void,
+    setOption: (option: IOption) => void
 }
 
 export const DrawContext = createContext<IDrawContext>({
@@ -20,11 +24,15 @@ export const DrawContext = createContext<IDrawContext>({
     audiences: {},
     graph: {},
     data: {},
+    options: {floor: 0, institute: "", widht: 0, height: 0},
     setCurGraphPoint: (pointId) => {},
     setIsMovingDisable: (isMoving) => {},
     updateAuditorium: (id, value) => {},
     updateGraphPoint: (id, value) => {},
-    updateData: (dataId, value) => {}
+    deleteGraphPoint: (id) => {},
+    updateData: (dataId, value) => {},
+    deleteData: (dataId) => {},
+    setOption: (option) => {}
 });
   
 export const DrawState = ({ children }: {children: React.ReactNode}) => {
@@ -33,6 +41,7 @@ export const DrawState = ({ children }: {children: React.ReactNode}) => {
     const [audiences, setAudiences] = useState<{ [id: string]: IAuditorium }>({});
     const [graph, setGraph] = useState<{ [id: string]: IGraphPoint }>({});
     const [data, setData] = useState<{ [dataId: string]: IData }>({});
+    const [options, setOption] = useState<IOption>({floor: 0, institute: "", widht: 0, height: 0})
 
     const updateAuditorium = useCallback((id: string, value: IAuditorium) => {
         setAudiences((prevAudiences) => ({
@@ -40,18 +49,46 @@ export const DrawState = ({ children }: {children: React.ReactNode}) => {
             [id]: value
         }));
     }, [setAudiences]);
+
     const updateGraphPoint = useCallback((id: string, value: IGraphPoint) => {
         setGraph((prevGraphPoint) => ({
             ...prevGraphPoint,
             [id]: value
         }));
     }, [setGraph]);
+
     const updateData = useCallback((dataid: string, value: IData) => {
         setData((prevData) => ({
             ...prevData,
             [dataid]: value
         }));
     }, [setData]);
+
+    const deleteData = useCallback((dataId: string) => {
+        if (data[dataId]) {
+            const newData = {...data};
+            delete newData[dataId];
+            setData(newData);
+        }
+    }, [data, setData]);
+
+    const deleteGraphPoint = useCallback((id: string) => {
+        if (graph[id]) {
+            deleteData(id);
+            for (const linked of graph[id].links) {
+                const linkedEl = {...graph[linked]};
+                const index = linkedEl.links.indexOf(id);
+                if (index !== -1) {
+                    linkedEl.links.splice(index);
+                }
+                updateGraphPoint(linked, linkedEl);
+            }
+
+            const newGraph = {...graph};
+            delete newGraph[id];
+            setGraph(newGraph);
+        }
+    }, [graph, setGraph, deleteData, updateGraphPoint]);
 
     return (
         <DrawContext.Provider value={{ 
@@ -60,11 +97,15 @@ export const DrawState = ({ children }: {children: React.ReactNode}) => {
             audiences,
             graph,
             data,
+            options,
             setCurGraphPoint,
             setIsMovingDisable,
             updateAuditorium,
             updateGraphPoint,
-            updateData
+            deleteData,
+            updateData,
+            deleteGraphPoint,
+            setOption
         }}>
             {children}
         </DrawContext.Provider>
