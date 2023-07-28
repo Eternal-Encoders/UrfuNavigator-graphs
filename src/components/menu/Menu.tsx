@@ -109,8 +109,8 @@ function Menu({dataId}: MenuProps) {
                     </>
                 }
                 <Download 
-                    institiute={options.institute}
-                    floor={options.floor} 
+                    institiute={institute}
+                    floor={floor} 
                 />
             </Form>
         </Container>
