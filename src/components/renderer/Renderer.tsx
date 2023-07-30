@@ -57,7 +57,6 @@ function Renderer({}: RendererProps) {
         }
 
         function handelOnKeyup(e: KeyboardEvent) {
-            console.log(e.key);
             switch (e.key) {
                 case 'Delete':
                     if (curGraphPoint) {
