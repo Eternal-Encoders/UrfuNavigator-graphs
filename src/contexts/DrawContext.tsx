@@ -74,7 +74,6 @@ export const DrawState = ({ children }: {children: React.ReactNode}) => {
 
     const deleteGraphPoint = useCallback((id: string) => {
         if (graph[id]) {
-            deleteData(id);
             for (const linked of graph[id].links) {
                 const linkedEl = {...graph[linked]};
                 const index = linkedEl.links.indexOf(id);
@@ -88,7 +87,7 @@ export const DrawState = ({ children }: {children: React.ReactNode}) => {
             delete newGraph[id];
             setGraph(newGraph);
         }
-    }, [graph, setGraph, deleteData, updateGraphPoint]);
+    }, [graph, setGraph, updateGraphPoint]);
 
     return (
         <DrawContext.Provider value={{ 

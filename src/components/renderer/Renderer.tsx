@@ -22,6 +22,7 @@ function Renderer({}: RendererProps) {
         updateGraphPoint,
         updateData,
         deleteGraphPoint,
+        deleteData,
         setIsMovingDisable,
         setCurGraphPoint
     } = useContext(DrawContext);
@@ -31,7 +32,6 @@ function Renderer({}: RendererProps) {
 
     useEffect(() => {
         function handelOnClick(e: MouseEvent) {
-            console.log(e);
             const newPointId = getRandomString(9);
 
             if (curGraphPoint) {
@@ -62,6 +62,7 @@ function Renderer({}: RendererProps) {
                 case 'Delete':
                     if (curGraphPoint) {
                         deleteGraphPoint(curGraphPoint);
+                        deleteData(curGraphPoint);
                         setCurGraphPoint(undefined);
                     }
                     break;
@@ -88,6 +89,7 @@ function Renderer({}: RendererProps) {
         options,
         updateData, 
         deleteGraphPoint,
+        deleteData,
         updateGraphPoint,
         setCurGraphPoint
     ]);
