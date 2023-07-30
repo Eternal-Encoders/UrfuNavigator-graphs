@@ -35,25 +35,20 @@ interface IData {
   availableFloors?: number[]
 }
 
-interface IOption {
-  floor: number,
-  institute: string,
-  widht: number,
-  height: number
-}
-
 interface IMapObject {
     audiences: { [id: string]: IAuditorium },
     graph: { [id: string]: IGraphPoint },
-    data: { [dataId: string]: IData }
-    options: IOption
+    data: { [dataId: string]: IData },
+    floor: number,
+    institute: string,
+    widht: number,
+    height: number
 }
 
 export type {
     IAuditorium,
     IGraphPoint,
     IAuditoriumChild,
-    IOption,
     IData,
     IMapObject
 }
