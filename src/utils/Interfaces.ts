@@ -45,10 +45,18 @@ interface IMapObject {
     height: number
 }
 
+interface IOption {
+  floor: number,
+  institute: string,
+  widht: number,
+  height: number
+}
+
 export type {
     IAuditorium,
     IGraphPoint,
     IAuditoriumChild,
     IData,
-    IMapObject
+    IMapObject,
+    IOption
 }

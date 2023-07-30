@@ -29,7 +29,12 @@ function MapUploader({onUpload}: MapUploaderProps) {
                     const dataObj = json.data[key];
                     updateData(key, dataObj);
                 });
-                setOption(json.options);
+                setOption({
+                    institute: json.institute,
+                    floor: json.floor,
+                    widht: json.widht,
+                    height: json.height
+                });
             }
             onUpload(false);
         }
