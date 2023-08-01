@@ -1,32 +1,45 @@
 import { type } from "os"
 import { PointTypes } from "./Constants"
 
+interface IAuditoriumDoors {
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+  fill: string
+}
+
 interface IAuditoriumChild {
-    type: "text" | "icon",
-    x: number,
-    y: number,
-    identifier: string
-  }
+  type: "text" | "icon",
+  x: number,
+  y: number,
+  identifier: string
+}
   
 interface IAuditorium {
-    x: number,
-    y: number,
-    width: number,
-    height: number,
-    fill?: string,
-    stroke?: string,
-    children: IAuditoriumChild[]
+  _id: string
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+  fill?: string,
+  stroke?: string,
+  pointId: string,
+  children: IAuditoriumChild[],
+  doors: IAuditoriumDoors[]
 }
 
 interface IGraphPoint {
   x: number,
   y: number,
-  links: string[]
+  links: string[],
+  _id: string
 }
 
 interface IData {
+  _id: string,
   names: string[],
-  type: PointTypes,
+  types: PointTypes[],
   floor: number,
   institute: string,
   time: [string, string],
@@ -35,14 +48,23 @@ interface IData {
   availableFloors?: number[]
 }
 
+interface IService {
+  x: number,
+  y: number,
+  data: string,
+  stroke?: string,
+  fiil?: string
+}
+
 interface IMapObject {
-    audiences: { [id: string]: IAuditorium },
-    graph: { [id: string]: IGraphPoint },
-    data: { [dataId: string]: IData },
-    floor: number,
-    institute: string,
-    widht: number,
-    height: number
+  service: IService[],
+  audiences: { [id: string]: IAuditorium },
+  graph: { [id: string]: IGraphPoint },
+  data: { [dataId: string]: IData },
+  floor: number,
+  institute: string,
+  widht: number,
+  height: number
 }
 
 interface IOption {
@@ -53,10 +75,12 @@ interface IOption {
 }
 
 export type {
-    IAuditorium,
-    IGraphPoint,
-    IAuditoriumChild,
-    IData,
-    IMapObject,
-    IOption
+  IService,
+  IAuditoriumDoors,
+  IAuditorium,
+  IGraphPoint,
+  IAuditoriumChild,
+  IData,
+  IMapObject,
+  IOption
 }

@@ -20,6 +20,7 @@ function FormNames({names, setNames}: FormNamesProps) {
                 {names.map((el, index) => {
                     return <>
                         <FormControl 
+                            key={index}
                             type="text" 
                             placeholder="Название"
                             value={el}

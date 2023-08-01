@@ -7,25 +7,25 @@ import Graph from "../graph/Graph";
 import LinksLayer from "../links-layer/LinksLayer";
 import { getRandomString } from "../../utils/Utils";
 import { PointTypes } from "../../utils/Constants";
+import { MapContext } from "../../contexts/MapContext";
 
-interface RendererProps {
-}
-
-function Renderer({}: RendererProps) {
+function Renderer() {
     const {
         isMovingDisable, 
+        curGraphPoint,
+        setIsMovingDisable,
+        setCurGraphPoint
+    } = useContext(DrawContext);
+    const {
         audiences,
         options,
         graph,
         data,
-        curGraphPoint,
         updateGraphPoint,
         updateData,
         deleteGraphPoint,
         deleteData,
-        setIsMovingDisable,
-        setCurGraphPoint
-    } = useContext(DrawContext);
+    } = useContext(MapContext);
 
     const [scale, setScale] = useState(1);
     const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -38,13 +38,16 @@ function Renderer({}: RendererProps) {
                 graph[curGraphPoint].links.push(newPointId);
             }
 
+            setCurGraphPoint(newPointId);
             updateGraphPoint(newPointId, {
+                _id: newPointId,
                 x: (e.clientX - position.x) / scale,
                 y: (e.clientY - position.y) / scale,
                 links: curGraphPoint ? [curGraphPoint]: [],
             });
             updateData(newPointId, {
-                type: PointTypes.CORRIDOR,
+                _id: newPointId,
+                types: [PointTypes.CORRIDOR],
                 names: [],
                 floor: options.floor,
                 institute: options.institute,
@@ -77,7 +80,7 @@ function Renderer({}: RendererProps) {
         return () => {
             window.removeEventListener('click', handelOnClick);
             window.removeEventListener('contextmenu', handelonContextMenu);
-            window.addEventListener('keyup', handelOnKeyup);
+            window.removeEventListener('keyup', handelOnKeyup);
         }
     }, [
         curGraphPoint, 

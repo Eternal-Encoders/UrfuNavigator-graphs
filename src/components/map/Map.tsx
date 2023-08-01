@@ -16,6 +16,9 @@ function Map({audiences}: MapProps) {
                 const el = audiences[key];
                 return <Auditorium
                     key={key}
+                    _id={el._id}
+                    doors={el.doors}
+                    pointId={el.pointId}
                     x={el.x}
                     y={el.y}
                     width={el.width}

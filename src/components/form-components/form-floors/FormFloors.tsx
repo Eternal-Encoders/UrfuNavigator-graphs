@@ -20,6 +20,7 @@ function FormFloors({floors, setFloors}: FormFloorsProps) {
                 {floors.map((el, index) => {
                     return <>
                         <FormControl 
+                            key={index}
                             type="number" 
                             placeholder="Название"
                             value={el}

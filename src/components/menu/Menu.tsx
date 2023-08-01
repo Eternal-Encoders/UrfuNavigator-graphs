@@ -4,12 +4,11 @@ import {
     Row, 
     Form
 } from "react-bootstrap";
-import { DrawContext } from "../../contexts/DrawContext";
 import { FormFloors, FormMenu, FormNames, FormPass, FormTime, FormTypes } from "../form-components";
 import { PointTypes } from "../../utils/Constants";
 import { getRandomString } from "../../utils/Utils";
+import { MapContext } from "../../contexts/MapContext";
 import Download from "../download/Download";
-
 import "./menu-style.css";
 
 
@@ -18,7 +17,7 @@ interface MenuProps {
 }
 
 function Menu({dataId}: MenuProps) {
-    const {data, options, updateData} = useContext(DrawContext);
+    const {data, options, updateData} = useContext(MapContext);
 
     function setByKey(key: string, value: any) {
         if (dataId) {
@@ -27,19 +26,24 @@ function Menu({dataId}: MenuProps) {
             // @ts-ignore
             newData[key] = value;
             
-            if (newData.type === PointTypes.Stair) {
+            if (newData.types.indexOf(PointTypes.Stair) !== -1) {
                 newData.availableFloors = newData.availableFloors ? newData.availableFloors: [newData.floor]
             } else {
                 newData.availableFloors = undefined;
             }
 
-            if (newData.type === PointTypes.Exit) {
+            if (newData.types.indexOf(PointTypes.Exit) !== -1) {
                 newData.isPassFree = newData.isPassFree !== undefined ? newData.isPassFree: true;
             } else {
                 newData.isPassFree = undefined;
             }
 
-            if (newData.type in [PointTypes.Cafe, PointTypes.Dinning, PointTypes.Vending]) {
+            const dinnings = [
+                PointTypes.Cafe, 
+                PointTypes.Dinning, 
+                PointTypes.Vending
+            ];
+            if (dinnings.some((e) => newData.types.indexOf(e) !== - 1)) {
                 newData.menuId = newData.menuId ? newData.menuId: getRandomString(9);
             } else {
                 newData.menuId = undefined;
@@ -53,7 +57,7 @@ function Menu({dataId}: MenuProps) {
         setByKey("names", names);
     }
 
-    function setType(type: PointTypes) {
+    function setType(type: PointTypes[]) {
         setByKey("type", type);
     }
 
@@ -76,7 +80,7 @@ function Menu({dataId}: MenuProps) {
                     <>
                             <FormNames names={data[dataId].names} setNames={setNames} />
                         <Row>
-                            <FormTypes type={data[dataId].type} setType={setType} />
+                            <FormTypes types={data[dataId].types} setTypes={setType} />
                         </Row>
                         <Row>
                             <FormTime time={data[dataId].time} setTime={setTime} />

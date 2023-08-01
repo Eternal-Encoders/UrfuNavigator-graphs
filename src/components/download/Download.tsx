@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Button } from "react-bootstrap";
-import { DrawContext } from "../../contexts/DrawContext";
+import { MapContext } from "../../contexts/MapContext";
 
 import "./download-style.css";
 import { IMapObject } from "../../utils/Interfaces";
@@ -11,10 +11,17 @@ interface DownloadProps {
 }
 
 function Download({institiute, floor}: DownloadProps) {
-    const {data, graph, audiences, options} = useContext(DrawContext);
+    const {
+        data, 
+        graph, 
+        audiences, 
+        options, 
+        service
+    } = useContext(MapContext);
 
     function handelOnClick() {
         const obj: IMapObject = {
+            service,
             audiences,
             graph,
             data,
