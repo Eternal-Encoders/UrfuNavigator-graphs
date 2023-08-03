@@ -45,7 +45,7 @@ interface IData {
   time: [string, string],
   menuId?: string,
   isPassFree?: boolean,
-  availableFloors?: number[]
+  stairId?: string
 }
 
 interface IService {

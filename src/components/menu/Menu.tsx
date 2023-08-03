@@ -4,7 +4,14 @@ import {
     Row, 
     Form
 } from "react-bootstrap";
-import { FormFloors, FormMenu, FormNames, FormPass, FormTime, FormTypes } from "../form-components";
+import { 
+    FormStairId, 
+    FormMenu, 
+    FormNames, 
+    FormPass, 
+    FormTime, 
+    FormTypes 
+} from "../form-components";
 import { PointTypes } from "../../utils/Constants";
 import { getRandomString } from "../../utils/Utils";
 import { MapContext } from "../../contexts/MapContext";
@@ -27,9 +34,9 @@ function Menu({dataId}: MenuProps) {
             newData[key] = value;
             
             if (newData.types.indexOf(PointTypes.Stair) !== -1) {
-                newData.availableFloors = newData.availableFloors ? newData.availableFloors: [newData.floor]
+                newData.stairId = newData.stairId ? newData.stairId: getRandomString(9);
             } else {
-                newData.availableFloors = undefined;
+                newData.stairId = undefined;
             }
 
             if (newData.types.indexOf(PointTypes.Exit) !== -1) {
@@ -69,8 +76,8 @@ function Menu({dataId}: MenuProps) {
         setByKey("isPassFree", isPassFree);
     }
 
-    function setFloors(floors: number[]) {
-        setByKey("availableFloors", floors);
+    function setStairId(stairId: string) {
+        setByKey("stairId", stairId);
     }
 
     return (
@@ -102,11 +109,11 @@ function Menu({dataId}: MenuProps) {
                             </Row>
                         }
 
-                        {data[dataId].availableFloors &&
+                        {data[dataId].stairId &&
                             <Row>
                                 {
-                                // @ts-ignore
-                                <FormFloors floors={data[dataId].availableFloors} setFloors={setFloors} />
+                                    // @ts-ignore
+                                    <FormStairId stairId={data[dataId].stairId} setStairId={setStairId} />
                                 }
                             </Row>
                         }
