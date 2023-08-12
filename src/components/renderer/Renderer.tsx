@@ -8,6 +8,7 @@ import LinksLayer from "../links-layer/LinksLayer";
 import { getRandomString } from "../../utils/Utils";
 import { PointTypes } from "../../utils/Constants";
 import { MapContext } from "../../contexts/MapContext";
+import ServiceContainer from "../service-container/ServiceContainer";
 
 function Renderer() {
     const {
@@ -18,6 +19,7 @@ function Renderer() {
     } = useContext(DrawContext);
     const {
         audiences,
+        service,
         options,
         graph,
         data,
@@ -126,6 +128,7 @@ function Renderer() {
                         width: '100vw' 
                     }}
                 >
+                    <ServiceContainer services={service} widht={options.widht} height={options.height} />
                     <Graph points={graph} />
                     <Map audiences={audiences} />
                 </TransformComponent>
