@@ -73,7 +73,7 @@ export const MapState = ({ children }: {children: React.ReactNode}) => {
                 const linkedEl = {...graph[linked]};
                 const index = linkedEl.links.indexOf(id);
                 if (index !== -1) {
-                    linkedEl.links.splice(index);
+                    linkedEl.links.splice(index, 1);
                 }
                 updateGraphPoint(linked, linkedEl);
             }
