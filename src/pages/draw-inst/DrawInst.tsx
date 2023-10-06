@@ -1,15 +1,11 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import Renderer from "../../components/renderer/Renderer";
 import MapUploader from "../../components/map-uploader/MapUploader";
 import { DrawState } from "../../contexts/DrawContext";
 import { MapState } from "../../contexts/MapContext";
 
-interface DrawInstProps {
-
-}
-
-function DrawInst({}: DrawInstProps) {
+function DrawInst() {
     const [isUpload, setIsUpload] = useState(true);
 
     return (

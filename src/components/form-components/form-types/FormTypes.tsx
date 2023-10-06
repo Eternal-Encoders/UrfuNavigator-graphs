@@ -1,11 +1,10 @@
-import React, {  } from "react";
 import {
     Button,
     FormGroup, 
     FormLabel, 
     FormSelect 
 } from "react-bootstrap";
-import { PointTypes, PointTranslation } from "../../../utils/Constants";
+import { PointTypes, PointTranslation } from "../../../utils/Interfaces";
 
 import "./form-types-style.css";
 
@@ -29,7 +28,7 @@ function FormTypes({types, setTypes}: FormTypesProps) {
                             }}
                         >
                             {Object.keys(PointTranslation).map((key) => {
-                                // @ts-ignore
+                                // @ts-expect-error: Call by string property name
                                 const el = PointTranslation[key];
 
                                 return <>

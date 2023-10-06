@@ -10,8 +10,7 @@ interface MapUploaderProps {
 function MapUploader({onUpload}: MapUploaderProps) {
     const {
         updateAuditorium, 
-        updateGraphPoint, 
-        updateData, 
+        updateGraphPoint,
         setOption, 
         setService
     } = useContext(MapContext);
@@ -31,14 +30,10 @@ function MapUploader({onUpload}: MapUploaderProps) {
                     const graphPoint = json.graph[key];
                     updateGraphPoint(key, graphPoint);
                 });
-                Object.keys(json.data).forEach((key) => {
-                    const dataObj = json.data[key];
-                    updateData(key, dataObj);
-                });
                 setOption({
                     institute: json.institute,
                     floor: json.floor,
-                    widht: json.widht,
+                    width: json.width,
                     height: json.height
                 });
                 setService(json.service);

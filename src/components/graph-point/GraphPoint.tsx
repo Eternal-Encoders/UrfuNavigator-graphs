@@ -1,9 +1,9 @@
 import React, { useCallback, useContext, useState } from "react";
-import { IGraphPoint } from "../../utils/Interfaces";
-import "./graph-point-style.css";
+import { IGraphPoint, PointTypes } from "../../utils/Interfaces";
 import { DrawContext } from "../../contexts/DrawContext";
 import { MapContext } from "../../contexts/MapContext";
 import { getShortestPath } from "../../utils/Utils";
+import "./graph-point-style.css";
 
 interface GraphPointProps {
     id: string
@@ -16,7 +16,7 @@ function GraphPoint({id, point, zoom}: GraphPointProps) {
     const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
     const {isMovingDisable, curGraphPoint, setIsMovingDisable, setCurGraphPoint} = useContext(DrawContext);
-    const {graph, updateGraphPoint} = useContext(MapContext);
+    const {graph, updateGraphPoint, options} = useContext(MapContext);
     
     const handelClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
         e.stopPropagation();
@@ -32,20 +32,32 @@ function GraphPoint({id, point, zoom}: GraphPointProps) {
         }
     }, [isMovingDisable, mousePos, zoom]);
 
-    const handelMouseUp = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    const handelMouseUp = useCallback(() => {
         updateGraphPoint(
             id,
             {
-                _id: id,
+                id: id,
                 x: point.x + offset.x,
                 y: point.y + offset.y,
-                links: point.links
+                links: point.links,
+                names: [],
+                types: [PointTypes.Corridor],
+                floor: options.floor,
+                institute: options.institute,
+                time: ["23", "59"]
             }
         );
         setIsMovingDisable(false);
         setMousePos({ x: 0, y: 0 });
         setOffset({ x: 0, y: 0 });
-    }, [id, offset, point, setIsMovingDisable, updateGraphPoint]);
+    }, [
+        id, 
+        offset, 
+        point, 
+        options, 
+        setIsMovingDisable, 
+        updateGraphPoint
+    ]);
 
     const handelMouseDown = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
         if (curGraphPoint && e.ctrlKey) {
@@ -72,12 +84,12 @@ function GraphPoint({id, point, zoom}: GraphPointProps) {
             if (deltaX <= deltaY) {
                 path.forEach((e) => {
                     e.x = graph[id].x;
-                    updateGraphPoint(e._id, e);
+                    updateGraphPoint(e.id, e);
                 });
             } else {
                 path.forEach((e) => {
                     e.y = graph[id].y;
-                    updateGraphPoint(e._id, e);
+                    updateGraphPoint(e.id, e);
                 });
             }
         }

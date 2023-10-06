@@ -1,4 +1,3 @@
-import React from "react";
 import { IAuditoriumChild } from "../../utils/Interfaces";
 import "./auditorium-text-style.css";
 

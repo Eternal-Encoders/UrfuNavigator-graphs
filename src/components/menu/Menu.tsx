@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { 
     Container, 
     Row, 
@@ -12,7 +12,7 @@ import {
     FormTime, 
     FormTypes 
 } from "../form-components";
-import { PointTypes } from "../../utils/Constants";
+import { PointTypes } from "../../utils/Interfaces";
 import { getRandomString } from "../../utils/Utils";
 import { MapContext } from "../../contexts/MapContext";
 import Download from "../download/Download";
@@ -24,13 +24,13 @@ interface MenuProps {
 }
 
 function Menu({dataId}: MenuProps) {
-    const {data, options, updateData} = useContext(MapContext);
+    const {graph, options, updateGraphPoint} = useContext(MapContext);
 
-    function setByKey(key: string, value: any) {
+    function setByKey(key: string, value: unknown) {
         if (dataId) {
-            const newData = {...data[dataId]};
+            const newData = {...graph[dataId]};
 
-            // @ts-ignore
+            // @ts-expect-error: There is call by the property name
             newData[key] = value;
             
             if (newData.types.indexOf(PointTypes.Stair) !== -1) {
@@ -56,7 +56,7 @@ function Menu({dataId}: MenuProps) {
                 newData.menuId = undefined;
             }
 
-            updateData(dataId, newData);
+            updateGraphPoint(dataId, newData);
          }
     }
 
@@ -85,35 +85,35 @@ function Menu({dataId}: MenuProps) {
             <Form className="menu-form bg-light" onClick={(e) => e.stopPropagation()}>
                 {dataId &&
                     <>
-                            <FormNames names={data[dataId].names} setNames={setNames} />
+                            <FormNames names={graph[dataId].names} setNames={setNames} />
                         <Row>
-                            <FormTypes types={data[dataId].types} setTypes={setType} />
+                            <FormTypes types={graph[dataId].types} setTypes={setType} />
                         </Row>
                         <Row>
-                            <FormTime time={data[dataId].time} setTime={setTime} />
+                            <FormTime time={graph[dataId].time} setTime={setTime} />
                         </Row>
                         
 
-                        {data[dataId].menuId &&
+                        {graph[dataId].menuId &&
                             <Row>
-                                <FormMenu menuId={String(data[dataId].menuId)} />
+                                <FormMenu menuId={String(graph[dataId].menuId)} />
                             </Row>
                         }
 
-                        {data[dataId].isPassFree &&
+                        {graph[dataId].isPassFree &&
                             <Row>
                                 <FormPass 
-                                    isPassFree={Boolean(data[dataId].isPassFree)}
+                                    isPassFree={Boolean(graph[dataId].isPassFree)}
                                     setIsPassFree={setIsPassFree}
                                 />
                             </Row>
                         }
 
-                        {data[dataId].stairId &&
+                        {graph[dataId].stairId &&
                             <Row>
                                 {
-                                    // @ts-ignore
-                                    <FormStairId stairId={data[dataId].stairId} setStairId={setStairId} />
+                                    // @ts-expect-error: In this case stairId allowes preserve
+                                    <FormStairId stairId={graph[dataId].stairId} setStairId={setStairId} />
                                 }
                             </Row>
                         }

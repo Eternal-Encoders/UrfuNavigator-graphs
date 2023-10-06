@@ -1,4 +1,3 @@
-import React from "react";
 import { IAuditorium } from "../../utils/Interfaces";
 import AuditoriumIcon from "../auditorium-icon/AuditoriumIcon";
 import AuditoriumText from "../auditorium-text/AuditoriumText";

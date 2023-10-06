@@ -10,8 +10,8 @@ interface IDrawContext {
 export const DrawContext = createContext<IDrawContext>({
     curGraphPoint: undefined,
     isMovingDisable: false,
-    setCurGraphPoint: (pointId) => {},
-    setIsMovingDisable: (isMoving) => {},
+    setCurGraphPoint: () => {},
+    setIsMovingDisable: () => {},
 });
   
 export const DrawState = ({ children }: {children: React.ReactNode}) => {

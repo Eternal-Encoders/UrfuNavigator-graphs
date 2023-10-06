@@ -1,21 +1,20 @@
-import React from "react";
 import { IService } from "../../utils/Interfaces";
 import "./service-container-style.css";
 import Service from "../service/Service";
 
 interface ServiceContainerProps {
     services: IService[],
-    widht: number,
+    width: number,
     height: number
 }
 
-function ServiceContainer({services, widht, height}: ServiceContainerProps) {
+function ServiceContainer({services, width, height}: ServiceContainerProps) {
     return (
         <div className="service-container">
             {services.map((e) => {
                 return (
                     <>
-                        <Service {...e} width={widht} height={height} />
+                        <Service {...e} width={width} height={height} />
                     </>
                 );
             })}

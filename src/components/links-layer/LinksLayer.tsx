@@ -1,4 +1,3 @@
-import React from "react";
 import PointsLink from "../points-link/PointsLink";
 import { IGraphPoint } from "../../utils/Interfaces";
 

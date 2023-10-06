@@ -1,4 +1,3 @@
-import React, { } from "react";
 import { IService } from "../../utils/Interfaces";
 import "./service-style.css";
 

@@ -1,7 +1,42 @@
-import { type } from "os"
-import { PointTypes } from "./Constants"
+export const enum PointTypes {
+  Corridor= "corridor",
+  Auditorium = "auditorium",
+  Dinning = "dinning",
+  Exit = "exit",
+  Stair = "stair",
+  ToiletM = "toilet-m",
+  ToiletW = "toilet-w",
+  Cafe = "cafe",
+  Vending = "vending",
+  Coworking = "coworking",
+  Atm = "atm",
+  Wardrobe = "wardrobe",
+  Print = "print",
+  Deanery = "deanery",
+  Students = "students",
+  Other = "other"
+}
 
-interface IAuditoriumDoors {
+export const PointTranslation = {
+  [PointTypes.Corridor]: "Коридор",
+  [PointTypes.Auditorium]: "Аудитория",
+  [PointTypes.Dinning]: "Столовая",
+  [PointTypes.Exit]: "Вход/Выход",
+  [PointTypes.Stair]: "Лустница",
+  [PointTypes.ToiletM]: "Туалет (М)",
+  [PointTypes.ToiletW]: "Туалет (Ж)",
+  [PointTypes.Cafe]: "Кафе",
+  [PointTypes.Vending]: "Вендинг",
+  [PointTypes.Coworking]: "Коворкинг",
+  [PointTypes.Atm]: "Банкомат",
+  [PointTypes.Wardrobe]: "Гардероб",
+  [PointTypes.Print]: "Печать",
+  [PointTypes.Deanery]: "Деканат",
+  [PointTypes.Students]: "Союз Студентов",
+  [PointTypes.Other]: "Другое..."
+};
+
+export interface IAuditoriumDoors {
   x: number,
   y: number,
   width: number,
@@ -9,15 +44,15 @@ interface IAuditoriumDoors {
   fill: string
 }
 
-interface IAuditoriumChild {
+export interface IAuditoriumChild {
   type: "text" | "icon",
   x: number,
   y: number,
   identifier: string
 }
-  
-interface IAuditorium {
-  _id: string
+
+export interface IAuditorium {
+  id: string,
   x: number,
   y: number,
   width: number,
@@ -29,17 +64,13 @@ interface IAuditorium {
   doors: IAuditoriumDoors[]
 }
 
-interface IGraphPoint {
+export interface IGraphPoint {
+  id: string
   x: number,
   y: number,
   links: string[],
-  _id: string
-}
-
-interface IData {
-  _id: string,
-  names: string[],
   types: PointTypes[],
+  names: string[],
   floor: number,
   institute: string,
   time: [string, string],
@@ -48,7 +79,7 @@ interface IData {
   stairId?: string
 }
 
-interface IService {
+export interface IService {
   x: number,
   y: number,
   data: string,
@@ -56,31 +87,19 @@ interface IService {
   fiil?: string
 }
 
-interface IMapObject {
+export interface IMapObject {
   service: IService[],
-  audiences: { [id: string]: IAuditorium },
-  graph: { [id: string]: IGraphPoint },
-  data: { [dataId: string]: IData },
-  floor: number,
+  audiences: {[id: string]: IAuditorium},
+  graph: {[id: string]: IGraphPoint},
   institute: string,
-  widht: number,
+  floor: number,
+  width: number,
   height: number
 }
 
-interface IOption {
+export interface IOption {
   floor: number,
   institute: string,
-  widht: number,
+  width: number,
   height: number
-}
-
-export type {
-  IService,
-  IAuditoriumDoors,
-  IAuditorium,
-  IGraphPoint,
-  IAuditoriumChild,
-  IData,
-  IMapObject,
-  IOption
 }

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { Button } from "react-bootstrap";
 import { MapContext } from "../../contexts/MapContext";
 
@@ -12,7 +12,6 @@ interface DownloadProps {
 
 function Download({institiute, floor}: DownloadProps) {
     const {
-        data, 
         graph, 
         audiences, 
         options, 
@@ -24,7 +23,6 @@ function Download({institiute, floor}: DownloadProps) {
             service,
             audiences,
             graph,
-            data,
             ...options
         };
 

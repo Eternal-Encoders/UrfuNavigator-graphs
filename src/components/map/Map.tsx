@@ -1,4 +1,3 @@
-import React from "react";
 import {  } from "react-bootstrap";
 import { IAuditorium } from "../../utils/Interfaces";
 import Auditorium from "../auditorium/Auditorium";
@@ -16,7 +15,7 @@ function Map({audiences}: MapProps) {
                 const el = audiences[key];
                 return <Auditorium
                     key={key}
-                    _id={el._id}
+                    id={el.id}
                     doors={el.doors}
                     pointId={el.pointId}
                     x={el.x}

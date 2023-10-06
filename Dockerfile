@@ -1,21 +1,22 @@
-FROM node:14-alpine as build-stage
+FROM node:16.17-alpine as build-stage
 WORKDIR /app
 
 COPY ./package.json ./package.json
+COPY ./yarn.lock ./yarn.lock
 
 ENV NODE_OPTIONS="--max-old-space-size=4096"
 
 ARG ORIGIN
 ENV ORIGIN=${ORIGIN}
 
-RUN npm install
+RUN yarn install
 
 COPY ./public ./public
 COPY ./src ./src
 COPY ./tsconfig.json ./tsconfig.json
 COPY ./nginx.conf ./nginx.conf
 
-RUN npm run build
+RUN yarn build
 
 FROM nginx:stable-alpine-slim
 
