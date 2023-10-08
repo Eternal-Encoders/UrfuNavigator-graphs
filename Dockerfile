@@ -13,7 +13,10 @@ RUN yarn install
 
 COPY ./public ./public
 COPY ./src ./src
+COPY ./index.html ./index.html
 COPY ./tsconfig.json ./tsconfig.json
+COPY ./tsconfig.node.json ./tsconfig.node.json
+COPY ./vite.config.ts ./vite.config.ts
 COPY ./nginx.conf ./nginx.conf
 
 RUN yarn build
