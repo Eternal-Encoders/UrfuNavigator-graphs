@@ -16,7 +16,7 @@ interface IMapContext {
 export const MapContext = createContext<IMapContext>({
     audiences: {},
     graph: {},
-    options: {floor: 0, institute: "", widht: 0, height: 0},
+    options: {floor: 0, institute: "", width: 0, height: 0},
     service: [],
     updateAuditorium: () => {},
     updateGraphPoint: () => {},
@@ -28,7 +28,7 @@ export const MapContext = createContext<IMapContext>({
 export const MapState = ({ children }: {children: React.ReactNode}) => {
     const [audiences, setAudiences] = useState<{ [id: string]: IAuditorium }>({});
     const [graph, setGraph] = useState<{ [id: string]: IGraphPoint }>({});
-    const [options, setOption] = useState<IOption>({floor: 0, institute: "", widht: 0, height: 0});
+    const [options, setOption] = useState<IOption>({floor: 0, institute: "", width: 0, height: 0});
     const [service, setService] = useState<IService[]>([]);
 
     const updateAuditorium = useCallback((id: string, value: IAuditorium) => {
