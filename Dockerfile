@@ -21,7 +21,7 @@ COPY ./nginx.conf ./nginx.conf
 
 RUN yarn build
 
-FROM nginx:stable-alpine-slimS
+FROM nginx:stable-alpine-slim
 
 RUN rm /etc/nginx/conf.d/*
 RUN rm -rf /usr/share/nginx/html/*
