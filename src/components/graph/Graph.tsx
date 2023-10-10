@@ -1,4 +1,3 @@
-import React from "react";
 import {  } from "react-bootstrap";
 import { IGraphPoint } from "../../utils/Interfaces";
 import { useTransformContext } from "react-zoom-pan-pinch";

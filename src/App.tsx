@@ -1,4 +1,3 @@
-import React from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import HomePage from './pages/home-page/HomePage';
 import DrawInst from './pages/draw-inst/DrawInst';

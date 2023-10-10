@@ -1,15 +1,21 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { 
     Container, 
     Row, 
     Form
 } from "react-bootstrap";
-import { DrawContext } from "../../contexts/DrawContext";
-import { FormFloors, FormMenu, FormNames, FormPass, FormTime, FormTypes } from "../form-components";
-import { PointTypes } from "../../utils/Constants";
+import { 
+    FormStairId, 
+    FormMenu, 
+    FormNames, 
+    FormPass, 
+    FormTime, 
+    FormTypes 
+} from "../form-components";
+import { PointTypes } from "../../utils/Interfaces";
 import { getRandomString } from "../../utils/Utils";
+import { MapContext } from "../../contexts/MapContext";
 import Download from "../download/Download";
-
 import "./menu-style.css";
 
 
@@ -18,34 +24,39 @@ interface MenuProps {
 }
 
 function Menu({dataId}: MenuProps) {
-    const {data, options, updateData} = useContext(DrawContext);
+    const {graph, options, updateGraphPoint} = useContext(MapContext);
 
-    function setByKey(key: string, value: any) {
+    function setByKey(key: string, value: unknown) {
         if (dataId) {
-            const newData = {...data[dataId]};
+            const newData = {...graph[dataId]};
 
-            // @ts-ignore
+            // @ts-expect-error: There is call by the property name
             newData[key] = value;
             
-            if (newData.type === PointTypes.Stair) {
-                newData.availableFloors = newData.availableFloors ? newData.availableFloors: [newData.floor]
+            if (newData.types.indexOf(PointTypes.Stair) !== -1) {
+                newData.stairId = newData.stairId ? newData.stairId: getRandomString(9);
             } else {
-                newData.availableFloors = undefined;
+                newData.stairId = undefined;
             }
 
-            if (newData.type === PointTypes.Exit) {
+            if (newData.types.indexOf(PointTypes.Exit) !== -1) {
                 newData.isPassFree = newData.isPassFree !== undefined ? newData.isPassFree: true;
             } else {
                 newData.isPassFree = undefined;
             }
 
-            if (newData.type in [PointTypes.Cafe, PointTypes.Dinning, PointTypes.Vending]) {
+            const dinnings = [
+                PointTypes.Cafe, 
+                PointTypes.Dinning, 
+                PointTypes.Vending
+            ];
+            if (dinnings.some((e) => newData.types.indexOf(e) !== - 1)) {
                 newData.menuId = newData.menuId ? newData.menuId: getRandomString(9);
             } else {
                 newData.menuId = undefined;
             }
 
-            updateData(dataId, newData);
+            updateGraphPoint(dataId, newData);
          }
     }
 
@@ -53,7 +64,7 @@ function Menu({dataId}: MenuProps) {
         setByKey("names", names);
     }
 
-    function setType(type: PointTypes) {
+    function setType(type: PointTypes[]) {
         setByKey("type", type);
     }
 
@@ -65,8 +76,8 @@ function Menu({dataId}: MenuProps) {
         setByKey("isPassFree", isPassFree);
     }
 
-    function setFloors(floors: number[]) {
-        setByKey("availableFloors", floors);
+    function setStairId(stairId: string) {
+        setByKey("stairId", stairId);
     }
 
     return (
@@ -74,43 +85,43 @@ function Menu({dataId}: MenuProps) {
             <Form className="menu-form bg-light" onClick={(e) => e.stopPropagation()}>
                 {dataId &&
                     <>
-                            <FormNames names={data[dataId].names} setNames={setNames} />
+                            <FormNames names={graph[dataId].names} setNames={setNames} />
                         <Row>
-                            <FormTypes type={data[dataId].type} setType={setType} />
+                            <FormTypes types={graph[dataId].types} setTypes={setType} />
                         </Row>
                         <Row>
-                            <FormTime time={data[dataId].time} setTime={setTime} />
+                            <FormTime time={graph[dataId].time} setTime={setTime} />
                         </Row>
                         
 
-                        {data[dataId].menuId &&
+                        {graph[dataId].menuId &&
                             <Row>
-                                <FormMenu menuId={String(data[dataId].menuId)} />
+                                <FormMenu menuId={String(graph[dataId].menuId)} />
                             </Row>
                         }
 
-                        {data[dataId].isPassFree &&
+                        {graph[dataId].isPassFree &&
                             <Row>
                                 <FormPass 
-                                    isPassFree={Boolean(data[dataId].isPassFree)}
+                                    isPassFree={Boolean(graph[dataId].isPassFree)}
                                     setIsPassFree={setIsPassFree}
                                 />
                             </Row>
                         }
 
-                        {data[dataId].availableFloors &&
+                        {graph[dataId].stairId &&
                             <Row>
                                 {
-                                // @ts-ignore
-                                <FormFloors floors={data[dataId].availableFloors} setFloors={setFloors} />
+                                    // @ts-expect-error: In this case stairId allowes preserve
+                                    <FormStairId stairId={graph[dataId].stairId} setStairId={setStairId} />
                                 }
                             </Row>
                         }
                     </>
                 }
                 <Download 
-                    institiute={institute}
-                    floor={floor} 
+                    institiute={options.institute}
+                    floor={options.floor} 
                 />
             </Form>
         </Container>

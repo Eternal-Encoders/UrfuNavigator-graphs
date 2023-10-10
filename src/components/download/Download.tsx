@@ -1,8 +1,9 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { Button } from "react-bootstrap";
-import { DrawContext } from "../../contexts/DrawContext";
+import { MapContext } from "../../contexts/MapContext";
 
 import "./download-style.css";
+import { IMapObject } from "../../utils/Interfaces";
 
 interface DownloadProps {
     institiute: string,
@@ -10,16 +11,23 @@ interface DownloadProps {
 }
 
 function Download({institiute, floor}: DownloadProps) {
-    const {data, graph, audiences, options} = useContext(DrawContext);
+    const {
+        graph, 
+        audiences, 
+        options, 
+        service
+    } = useContext(MapContext);
 
     function handelOnClick() {
-        const link = document.createElement("a");
-        const newFile = new Blob([JSON.stringify({
+        const obj: IMapObject = {
+            service,
             audiences,
             graph,
-            data,
-            options
-        })], { type: "application/json" });
+            ...options
+        };
+
+        const link = document.createElement("a");
+        const newFile = new Blob([JSON.stringify(obj)], { type: "application/json" });
         link.href = URL.createObjectURL(newFile);
         link.download = `${institiute}_${floor}.json`;
         link.click();

@@ -1,4 +1,3 @@
-import React, {  } from "react";
 import {
     FormGroup, 
     FormLabel, 
@@ -20,6 +19,7 @@ function FormNames({names, setNames}: FormNamesProps) {
                 {names.map((el, index) => {
                     return <>
                         <FormControl 
+                            key={index}
                             type="text" 
                             placeholder="Название"
                             value={el}

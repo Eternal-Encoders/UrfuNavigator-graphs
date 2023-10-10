@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import { 
     Container, 
@@ -8,11 +7,7 @@ import {
     Col,
 } from "react-bootstrap";
 
-interface HomePageProps {
-
-}
-
-function HomePage({}: HomePageProps) {
+function HomePage() {
     return (
         <Container fluid={true} style={{height: "100vh"}}>
             <Row className="h-100 d-flex align-items-center">

@@ -1,4 +1,3 @@
-import React, {  } from "react";
 import {
     FormGroup, 
     FormLabel, 
@@ -14,7 +13,7 @@ interface FormMenuProps {
 function FormMenu({menuId}: FormMenuProps) {
     return (
         <FormGroup>
-            <FormLabel>Название</FormLabel>
+            <FormLabel>Id для Меню</FormLabel>
             <FormControl 
                 disabled
                 type="text" 

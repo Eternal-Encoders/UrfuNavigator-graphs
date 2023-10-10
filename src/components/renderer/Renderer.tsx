@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { DrawContext } from "../../contexts/DrawContext";
 import Menu from "../menu/Menu";
@@ -6,45 +6,44 @@ import Map from "../map/Map";
 import Graph from "../graph/Graph";
 import LinksLayer from "../links-layer/LinksLayer";
 import { getRandomString } from "../../utils/Utils";
-import { PointTypes } from "../../utils/Constants";
+import { PointTypes } from "../../utils/Interfaces";
+import { MapContext } from "../../contexts/MapContext";
+import ServiceContainer from "../service-container/ServiceContainer";
 
-interface RendererProps {
-}
-
-function Renderer({}: RendererProps) {
+function Renderer() {
     const {
         isMovingDisable, 
-        audiences,
-        options,
-        graph,
-        data,
         curGraphPoint,
-        updateGraphPoint,
-        updateData,
-        deleteGraphPoint,
         setIsMovingDisable,
         setCurGraphPoint
     } = useContext(DrawContext);
+    const {
+        audiences,
+        service,
+        options,
+        graph,
+        updateGraphPoint,
+        deleteGraphPoint,
+    } = useContext(MapContext);
 
     const [scale, setScale] = useState(1);
     const [position, setPosition] = useState({ x: 0, y: 0 });
 
     useEffect(() => {
         function handelOnClick(e: MouseEvent) {
-            console.log(e);
             const newPointId = getRandomString(9);
 
             if (curGraphPoint) {
                 graph[curGraphPoint].links.push(newPointId);
             }
 
+            setCurGraphPoint(newPointId);
             updateGraphPoint(newPointId, {
+                id: newPointId,
                 x: (e.clientX - position.x) / scale,
                 y: (e.clientY - position.y) / scale,
                 links: curGraphPoint ? [curGraphPoint]: [],
-            });
-            updateData(newPointId, {
-                type: PointTypes.CORRIDOR,
+                types: [PointTypes.Corridor],
                 names: [],
                 floor: options.floor,
                 institute: options.institute,
@@ -57,7 +56,6 @@ function Renderer({}: RendererProps) {
         }
 
         function handelOnKeyup(e: KeyboardEvent) {
-            console.log(e.key);
             switch (e.key) {
                 case 'Delete':
                     if (curGraphPoint) {
@@ -77,16 +75,14 @@ function Renderer({}: RendererProps) {
         return () => {
             window.removeEventListener('click', handelOnClick);
             window.removeEventListener('contextmenu', handelonContextMenu);
-            window.addEventListener('keyup', handelOnKeyup);
+            window.removeEventListener('keyup', handelOnKeyup);
         }
     }, [
         curGraphPoint, 
-        data, 
         graph, 
         position, 
         scale,
         options,
-        updateData, 
         deleteGraphPoint,
         updateGraphPoint,
         setCurGraphPoint
@@ -108,11 +104,13 @@ function Renderer({}: RendererProps) {
                     if ((e as MouseEvent).button === 0) {
                         setIsMovingDisable(true)
                     }
+                    ref
                 }}
                 onPanningStop={() => setIsMovingDisable(false)}
                 onTransformed={(ref, state) => {
                     setScale(state.scale);
                     setPosition({ x: state.positionX, y: state.positionY });
+                    ref
                 }}
             >
                 <TransformComponent
@@ -122,6 +120,7 @@ function Renderer({}: RendererProps) {
                         width: '100vw' 
                     }}
                 >
+                    <ServiceContainer services={service} width={options.width} height={options.height} />
                     <Graph points={graph} />
                     <Map audiences={audiences} />
                 </TransformComponent>

@@ -1,14 +1,19 @@
 import React, { useContext } from "react";
 import { FormGroup, FormControl, FormLabel } from "react-bootstrap";
-import { DrawContext } from "../../contexts/DrawContext";
 import { IMapObject } from "../../utils/Interfaces";
+import { MapContext } from "../../contexts/MapContext";
 
 interface MapUploaderProps {
     onUpload: (isUpload: boolean) => void
 }
 
 function MapUploader({onUpload}: MapUploaderProps) {
-    const {updateAuditorium, updateGraphPoint, updateData, setOption} = useContext(DrawContext);
+    const {
+        updateAuditorium, 
+        updateGraphPoint,
+        setOption, 
+        setService
+    } = useContext(MapContext);
 
     function onChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
         if (e.target.files && e.target.files.length === 1) {
@@ -25,11 +30,13 @@ function MapUploader({onUpload}: MapUploaderProps) {
                     const graphPoint = json.graph[key];
                     updateGraphPoint(key, graphPoint);
                 });
-                Object.keys(json.data).forEach((key) => {
-                    const dataObj = json.data[key];
-                    updateData(key, dataObj);
+                setOption({
+                    institute: json.institute,
+                    floor: json.floor,
+                    width: json.width,
+                    height: json.height
                 });
-                setOption(json.options);
+                setService(json.service);
             }
             onUpload(false);
         }
@@ -44,5 +51,3 @@ function MapUploader({onUpload}: MapUploaderProps) {
 }
 
 export default MapUploader;
-
-//<Button onClick={setIsUpload}>Загрузить json объект этажа</Button>

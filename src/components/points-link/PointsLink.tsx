@@ -1,4 +1,3 @@
-import React from "react";
 import Xarrow, { refType } from "react-xarrows";
 import "./points-link-style.css";
 

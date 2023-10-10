@@ -1,38 +1,65 @@
-import React, {  } from "react";
 import {
-    Col,
+    Button,
     FormGroup, 
     FormLabel, 
     FormSelect 
 } from "react-bootstrap";
-import { PointTypes, PointTranslation } from "../../../utils/Constants";
+import { PointTypes, PointTranslation } from "../../../utils/Interfaces";
 
 import "./form-types-style.css";
 
 interface FormTypesProps {
-    type: PointTypes,
-    setType: (type: PointTypes) => void
+    types: PointTypes[],
+    setTypes: (types: PointTypes[]) => void
 }
 
-function FormTypes({type, setType}: FormTypesProps) {
+function FormTypes({types, setTypes}: FormTypesProps) {
     return (
         <FormGroup>
             <FormLabel>Тип точки</FormLabel>
-            <FormSelect
-                value={type} 
-                onChange={(e) => setType(e.target.value as PointTypes)}
-            >
-                {Object.keys(PointTranslation).map((key) => {
-                    // @ts-ignore
-                    const el = PointTranslation[key];
-
+            {types.map((el, index) => {
                     return <>
-                        <option value={key}>
-                            {el}
-                        </option>
+                         <FormSelect
+                            key={index}
+                            value={el} 
+                            onChange={(e) => {
+                                types[index] = e.target.value as PointTypes;
+                                setTypes(types);
+                            }}
+                        >
+                            {Object.keys(PointTranslation).map((key) => {
+                                // @ts-expect-error: Call by string property name
+                                const el = PointTranslation[key];
+
+                                return <>
+                                    <option value={key}>
+                                        {el}
+                                    </option>
+                                </>
+                            })}
+                        </FormSelect>
                     </>
                 })}
-            </FormSelect>
+            <Button 
+                style={{
+                    marginRight: "10px"
+                }}
+                onClick={() => {
+                    types.push(PointTypes.Auditorium);
+                    setTypes(types);
+                }}
+            >
+                +
+            </Button>
+            <Button 
+                className=""
+                onClick={() => {
+                    types.pop();
+                    setTypes(types);
+                }}
+            >
+                -
+            </Button>
         </FormGroup>
     );
 }

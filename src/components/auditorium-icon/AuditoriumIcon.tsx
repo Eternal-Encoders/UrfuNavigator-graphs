@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { IAuditoriumChild } from "../../utils/Interfaces";
 import nullSvg from "./img/null.svg";
 import "./auditorium-icon-style.css"
