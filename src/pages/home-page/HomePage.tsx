@@ -8,6 +8,7 @@ import {
 } from "react-bootstrap";
 
 function HomePage() {
+    console.log(1);
     return (
         <Container fluid={true} style={{height: "100vh"}}>
             <Row className="h-100 d-flex align-items-center">
