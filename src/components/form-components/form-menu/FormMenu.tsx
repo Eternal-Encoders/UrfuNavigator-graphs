@@ -7,7 +7,7 @@ import {
 import "./form-menu-style.css";
 
 interface FormMenuProps {
-    menuId: string
+    menuId?: string
 }
 
 function FormMenu({menuId}: FormMenuProps) {

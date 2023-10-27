@@ -18,6 +18,11 @@ import { MapContext } from "../../contexts/MapContext";
 import Download from "../download/Download";
 import "./menu-style.css";
 
+const dinnings = [
+    PointTypes.Cafe, 
+    PointTypes.Dinning, 
+    PointTypes.Vending
+]
 
 interface MenuProps {
     dataId: string | undefined
@@ -94,13 +99,13 @@ function Menu({dataId}: MenuProps) {
                         </Row>
                         
 
-                        {graph[dataId].menuId &&
+                        {dinnings.some((e) => graph[dataId].types.indexOf(e) !== - 1) &&
                             <Row>
                                 <FormMenu menuId={String(graph[dataId].menuId)} />
                             </Row>
                         }
 
-                        {graph[dataId].isPassFree &&
+                        {graph[dataId].types.indexOf(PointTypes.Exit) !== -1 &&
                             <Row>
                                 <FormPass 
                                     isPassFree={Boolean(graph[dataId].isPassFree)}
@@ -109,10 +114,9 @@ function Menu({dataId}: MenuProps) {
                             </Row>
                         }
 
-                        {graph[dataId].stairId &&
+                        {graph[dataId].types.indexOf(PointTypes.Stair) !== -1 &&
                             <Row>
                                 {
-                                    // @ts-expect-error: In this case stairId allowes preserve
                                     <FormStairId stairId={graph[dataId].stairId} setStairId={setStairId} />
                                 }
                             </Row>

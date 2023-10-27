@@ -16,7 +16,7 @@ function GraphPoint({id, point, zoom}: GraphPointProps) {
     const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
     const {isMovingDisable, curGraphPoint, setIsMovingDisable, setCurGraphPoint} = useContext(DrawContext);
-    const {graph, updateGraphPoint, options} = useContext(MapContext);
+    const {graph, updateGraphPoint} = useContext(MapContext);
     
     const handelClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
         e.stopPropagation();
@@ -40,11 +40,11 @@ function GraphPoint({id, point, zoom}: GraphPointProps) {
                 x: point.x + offset.x,
                 y: point.y + offset.y,
                 links: point.links,
-                names: [],
-                types: [PointTypes.Corridor],
-                floor: options.floor,
-                institute: options.institute,
-                time: ["23", "59"]
+                names: point.names,
+                types: point.types,
+                floor: point.floor,
+                institute: point.institute,
+                time: point.time
             }
         );
         setIsMovingDisable(false);
@@ -54,7 +54,6 @@ function GraphPoint({id, point, zoom}: GraphPointProps) {
         id, 
         offset, 
         point, 
-        options, 
         setIsMovingDisable, 
         updateGraphPoint
     ]);

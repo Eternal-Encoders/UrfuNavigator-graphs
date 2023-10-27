@@ -7,7 +7,7 @@ import {
 import "./form-stair-id-style.css";
 
 interface FormStairIdProps {
-    stairId: string,
+    stairId?: string,
     setStairId: (stairId: string) => void
 }
 

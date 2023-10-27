@@ -7,11 +7,12 @@ import {
 import "./form-pass-style.css";
 
 interface FormPassProps {
-    isPassFree: boolean,
+    isPassFree?: boolean,
     setIsPassFree: (isPassFree: boolean) => void
 }
 
 function FormPass({isPassFree, setIsPassFree}: FormPassProps) {
+
     return (
         <FormGroup>
             <FormLabel>Нужен ли пропуск?</FormLabel>
