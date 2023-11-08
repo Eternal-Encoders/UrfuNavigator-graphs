@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useState } from "react";
-import { IGraphPoint, PointTypes } from "../../utils/Interfaces";
+import { IGraphPoint } from "../../utils/Interfaces";
 import { DrawContext } from "../../contexts/DrawContext";
 import { MapContext } from "../../contexts/MapContext";
 import { getShortestPath } from "../../utils/Utils";
@@ -16,7 +16,7 @@ function GraphPoint({id, point, zoom}: GraphPointProps) {
     const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
     const {isMovingDisable, curGraphPoint, setIsMovingDisable, setCurGraphPoint} = useContext(DrawContext);
-    const {graph, updateGraphPoint, options} = useContext(MapContext);
+    const {graph, updateGraphPoint} = useContext(MapContext);
     
     const handelClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
         e.stopPropagation();
@@ -36,25 +36,18 @@ function GraphPoint({id, point, zoom}: GraphPointProps) {
         updateGraphPoint(
             id,
             {
-                id: id,
+                ...point,
                 x: point.x + offset.x,
                 y: point.y + offset.y,
-                links: point.links,
-                names: [],
-                types: [PointTypes.Corridor],
-                floor: options.floor,
-                institute: options.institute,
-                time: ["23", "59"]
             }
         );
         setIsMovingDisable(false);
         setMousePos({ x: 0, y: 0 });
         setOffset({ x: 0, y: 0 });
     }, [
-        id, 
+        id,
         offset, 
         point, 
-        options, 
         setIsMovingDisable, 
         updateGraphPoint
     ]);
