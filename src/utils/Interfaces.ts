@@ -17,6 +17,16 @@ export const enum PointTypes {
   Other = "other"
 }
 
+export const enum WeekDay {
+  Mon = 0,
+  Tue = 1,
+  Wed = 2,
+  Thu = 3,
+  Fri = 4,
+  Sat = 5,
+  Sun = 6
+}
+
 export const PointTranslation = {
   [PointTypes.Corridor]: "Коридор",
   [PointTypes.Auditorium]: "Аудитория",
@@ -64,6 +74,22 @@ export interface IAuditorium {
   doors: IAuditoriumDoors[]
 }
 
+export interface ITime {
+  isDayOff?: boolean
+  from: string,
+  to: string
+}
+
+export type IWeek = [
+  ITime?, 
+  ITime?, 
+  ITime?, 
+  ITime?, 
+  ITime?, 
+  ITime?, 
+  ITime?
+];
+
 export interface IGraphPoint {
   id: string
   x: number,
@@ -73,7 +99,9 @@ export interface IGraphPoint {
   names: string[],
   floor: number,
   institute: string,
-  time: [string, string],
+  time: IWeek,
+  description: string,
+  info: string,
   menuId?: string,
   isPassFree?: boolean,
   stairId?: string

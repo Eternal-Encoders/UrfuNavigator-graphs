@@ -12,11 +12,13 @@ import {
     FormTime, 
     FormTypes 
 } from "../form-components";
-import { PointTypes } from "../../utils/Interfaces";
+import { IWeek, PointTypes } from "../../utils/Interfaces";
 import { getRandomString } from "../../utils/Utils";
 import { MapContext } from "../../contexts/MapContext";
 import Download from "../download/Download";
 import "./menu-style.css";
+import FormDescription from "../form-components/form-description/FormDescription";
+import FormInfo from "../form-components/form-info/FormInfo";
 
 
 interface MenuProps {
@@ -68,8 +70,16 @@ function Menu({dataId}: MenuProps) {
         setByKey("type", type);
     }
 
-    function setTime(time: [string, string]) {
+    function setWeek(time: IWeek) {
         setByKey("time", time);
+    }
+
+    function setDescription(description: string) {
+        setByKey("description", description);
+    }
+
+    function setInfo(info: string) {
+        setByKey("info", info);
     }
 
     function setIsPassFree(isPassFree: boolean) {
@@ -85,12 +95,20 @@ function Menu({dataId}: MenuProps) {
             <Form className="menu-form bg-light" onClick={(e) => e.stopPropagation()}>
                 {dataId &&
                     <>
+                        <Row>
                             <FormNames names={graph[dataId].names} setNames={setNames} />
+                        </Row>
                         <Row>
                             <FormTypes types={graph[dataId].types} setTypes={setType} />
                         </Row>
                         <Row>
-                            <FormTime time={graph[dataId].time} setTime={setTime} />
+                            <FormTime week={graph[dataId].time} setWeek={setWeek} />
+                        </Row>
+                        <Row>
+                            <FormDescription description={graph[dataId].description} setDescription={setDescription} />
+                        </Row>
+                        <Row>
+                            <FormInfo info={graph[dataId].info} setInfo={setInfo}  />
                         </Row>
                         
 
