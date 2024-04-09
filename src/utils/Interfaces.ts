@@ -32,7 +32,7 @@ export const PointTranslation = {
   [PointTypes.Auditorium]: "Аудитория",
   [PointTypes.Dinning]: "Столовая",
   [PointTypes.Exit]: "Вход/Выход",
-  [PointTypes.Stair]: "Лустница",
+  [PointTypes.Stair]: "Лестница",
   [PointTypes.ToiletM]: "Туалет (М)",
   [PointTypes.ToiletW]: "Туалет (Ж)",
   [PointTypes.Cafe]: "Кафе",
