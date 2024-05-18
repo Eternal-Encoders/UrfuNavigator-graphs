@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { FormGroup, FormControl, FormLabel } from "react-bootstrap";
 import { IMapObject } from "../../utils/Interfaces";
 import { MapContext } from "../../contexts/MapContext";
+import { getDefaultGraphPoint } from "../../utils/const";
 
 interface MapUploaderProps {
     onUpload: (isUpload: boolean) => void
@@ -28,6 +29,21 @@ function MapUploader({onUpload}: MapUploaderProps) {
                 });
                 Object.keys(json.graph).forEach((key) => {
                     const graphPoint = json.graph[key];
+                    const defPoint = getDefaultGraphPoint({
+                        institute: json.institute,
+                        floor: json.floor,
+                        width: json.width,
+                        height: json.height
+                    });
+
+                    Object.keys(defPoint).forEach((prop_key) => {
+                        //@ts-expect-error Call by property name
+                        const prop_val = graphPoint[prop_key];
+                        if (!prop_val) {
+                            //@ts-expect-error Call by property name
+                            graphPoint[prop_key] = defPoint[prop_key]
+                        }
+                    })
                     updateGraphPoint(key, graphPoint);
                 });
                 setOption({

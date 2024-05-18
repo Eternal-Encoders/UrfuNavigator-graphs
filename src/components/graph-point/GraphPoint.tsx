@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useState } from "react";
-import { IGraphPoint, PointTypes } from "../../utils/Interfaces";
+import { IGraphPoint } from "../../utils/Interfaces";
 import { DrawContext } from "../../contexts/DrawContext";
 import { MapContext } from "../../contexts/MapContext";
 import { getShortestPath } from "../../utils/Utils";
@@ -36,22 +36,16 @@ function GraphPoint({id, point, zoom}: GraphPointProps) {
         updateGraphPoint(
             id,
             {
-                id: id,
+                ...point,
                 x: point.x + offset.x,
                 y: point.y + offset.y,
-                links: point.links,
-                names: point.names,
-                types: point.types,
-                floor: point.floor,
-                institute: point.institute,
-                time: point.time
             }
         );
         setIsMovingDisable(false);
         setMousePos({ x: 0, y: 0 });
         setOffset({ x: 0, y: 0 });
     }, [
-        id, 
+        id,
         offset, 
         point, 
         setIsMovingDisable, 

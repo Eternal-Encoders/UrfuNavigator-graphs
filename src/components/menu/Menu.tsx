@@ -2,7 +2,10 @@ import { useContext } from "react";
 import { 
     Container, 
     Row, 
-    Form
+    Form,
+    Accordion,
+    AccordionItem,
+    AccordionHeader
 } from "react-bootstrap";
 import { 
     FormStairId, 
@@ -12,11 +15,14 @@ import {
     FormTime, 
     FormTypes 
 } from "../form-components";
-import { PointTypes } from "../../utils/Interfaces";
+import { IWeek, PointTypes } from "../../utils/Interfaces";
 import { getRandomString } from "../../utils/Utils";
 import { MapContext } from "../../contexts/MapContext";
 import Download from "../download/Download";
 import "./menu-style.css";
+import FormDescription from "../form-components/form-description/FormDescription";
+import FormInfo from "../form-components/form-info/FormInfo";
+import AccordionBody from "react-bootstrap/esm/AccordionBody";
 
 const dinnings = [
     PointTypes.Cafe, 
@@ -73,8 +79,16 @@ function Menu({dataId}: MenuProps) {
         setByKey("type", type);
     }
 
-    function setTime(time: [string, string]) {
+    function setWeek(time: IWeek) {
         setByKey("time", time);
+    }
+
+    function setDescription(description: string) {
+        setByKey("description", description);
+    }
+
+    function setInfo(info: string) {
+        setByKey("info", info);
     }
 
     function setIsPassFree(isPassFree: boolean) {
@@ -88,45 +102,59 @@ function Menu({dataId}: MenuProps) {
     return (
         <Container fluid className="menu">
             <Form className="menu-form bg-light" onClick={(e) => e.stopPropagation()}>
-                {dataId &&
-                    <>
-                            <FormNames names={graph[dataId].names} setNames={setNames} />
-                        <Row>
-                            <FormTypes types={graph[dataId].types} setTypes={setType} />
-                        </Row>
-                        <Row>
-                            <FormTime time={graph[dataId].time} setTime={setTime} />
-                        </Row>
-                        
+                <Accordion defaultActiveKey="0">
+                    <AccordionItem eventKey="0">
+                        <AccordionHeader>{dataId ? graph[dataId].names.join(", "): "Menu"}</AccordionHeader>
+                        <AccordionBody>
+                            {dataId &&
+                                <>
+                                    <Row>
+                                        <FormNames names={graph[dataId].names} setNames={setNames} />
+                                    </Row>
+                                    <Row>
+                                        <FormTypes types={graph[dataId].types} setTypes={setType} />
+                                    </Row>
+                                    <FormTime week={graph[dataId].time} setWeek={setWeek} />
+                                    <Row>
+                                        <FormDescription description={graph[dataId].description} setDescription={setDescription} />
+                                    </Row>
+                                    <Row>
+                                        <FormInfo info={graph[dataId].info} setInfo={setInfo}  />
+                                    </Row>
+                                    
 
-                        {dinnings.some((e) => graph[dataId].types.indexOf(e) !== - 1) &&
-                            <Row>
-                                <FormMenu menuId={String(graph[dataId].menuId)} />
-                            </Row>
-                        }
+                                    {graph[dataId].menuId &&
+                                        <Row>
+                                            <FormMenu menuId={String(graph[dataId].menuId)} />
+                                        </Row>
+                                    }
 
-                        {graph[dataId].types.indexOf(PointTypes.Exit) !== -1 &&
-                            <Row>
-                                <FormPass 
-                                    isPassFree={Boolean(graph[dataId].isPassFree)}
-                                    setIsPassFree={setIsPassFree}
-                                />
-                            </Row>
-                        }
+                                    {graph[dataId].isPassFree &&
+                                        <Row>
+                                            <FormPass 
+                                                isPassFree={Boolean(graph[dataId].isPassFree)}
+                                                setIsPassFree={setIsPassFree}
+                                            />
+                                        </Row>
+                                    }
 
-                        {graph[dataId].types.indexOf(PointTypes.Stair) !== -1 &&
-                            <Row>
-                                {
-                                    <FormStairId stairId={graph[dataId].stairId} setStairId={setStairId} />
-                                }
-                            </Row>
-                        }
-                    </>
-                }
-                <Download 
-                    institiute={options.institute}
-                    floor={options.floor} 
-                />
+                                    {graph[dataId].stairId &&
+                                        <Row>
+                                            {
+                                                // @ts-expect-error: In this case stairId allowes preserve
+                                                <FormStairId stairId={graph[dataId].stairId} setStairId={setStairId} />
+                                            }
+                                        </Row>
+                                    }
+                                </>
+                            }
+                            <Download 
+                                institiute={options.institute}
+                                floor={options.floor} 
+                            />    
+                        </AccordionBody>
+                    </AccordionItem>
+                </Accordion>
             </Form>
         </Container>
     );
